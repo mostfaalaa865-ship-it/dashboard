@@ -38,7 +38,7 @@ function SideBar() {
           ))}
 
           <div className="mt-4 w-[180px]">
-            <p className="text-[#8F929C]">Apps</p>
+            <p className="text-[#8F929C]">Appsss</p>
             {Applinks.map((item) => (
               <NavLink
                 to={item.path}
