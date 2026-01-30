@@ -1,15 +1,13 @@
 import { NavLink } from "react-router-dom";
-import Vector from "./Icons/Vector.svg";
-import logo from "./Icons/logo.svg";
-import { links ,linkstwo } from "../NavLinks";
+import Vector from "../../assets/Icons/Vector.svg";
+import logo from "../../assets/Icons/logo.svg";
+import { links, linkstwo } from "../NavLinks";
 import { Applinks } from "../NavLinks";
-import menu from "./Icons/menu.svg";
+import menu from "../../assets/Icons/menu.svg";
 
 function SideBar() {
   return (
-
-    <div className="sidebar  sticky  w-52.5 p-3.75 z-50 flex flex-col bg-[#F3F4F6]">
-      <p>mostafa</p>
+    <div className="sidebar  sticky  w-52.5 p-2 z-50 flex flex-col h-full top-0  bg-[#F3F4F6]">
       <div className="sidebar-title flex items-center gap-1 w-[180px] h-[36px] mb-4">
         <div className="name w-[152px] p-2 flex items-center gap-2 cursor-pointer hover:bg-[#E2E4E9] rounded-[6px]">
           <img src={logo} className="w-[20px] h-[20px]" alt="" />
@@ -38,7 +36,7 @@ function SideBar() {
           ))}
 
           <div className="mt-4 w-[180px]">
-            <p className="text-[#8F929C]">Appsss</p>
+            <p className="text-[#8F929C]">Apps</p>
             {Applinks.map((item) => (
               <NavLink
                 to={item.path}
