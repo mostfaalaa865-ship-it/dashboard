@@ -23,10 +23,12 @@ function TopBar() {
       </div>
 
       <div className="flex gap-3 text-[13px]">
-        <button className="h-[28px] px-3 rounded-sm border border-[#E2E4E9]
+        <button
+          className="h-[28px] px-3 rounded-sm border border-[#E2E4E9]
           cursor-pointer transition hover:bg-[#F3F4F6]
           flex items-center gap-2
-        ">
+        "
+        >
           Import / Export
           <img src={VectorIcon2} alt="" className="w-[9px] h-[6px]" />
         </button>
