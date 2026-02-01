@@ -7,7 +7,6 @@ function Dashboard() {
     <div>
       <TopBar />
       <div className="flex  ">
-        <hr />
         <SideBar />
         <div className="flex-1 mt-14  ">
           <Outlet />

@@ -27,27 +27,27 @@ export const links = [
   },
   {
     name: "Search",
-    path: "/Search",
+    path: "Search",
     icon: Search,
   },
   {
     name: "Clients",
-    path: "/Clients",
+    path: "Clients",
     icon: Clients,
   },
   {
     name: "Companies",
-    path: "/Companies",
+    path: "Companies",
     icon: Companies,
   },
   {
     name: "Notifications",
-    path: "/Notifications",
+    path: "Notifications",
     icon: Notifications,
   },
   {
     name: "Automation",
-    path: "/Automation",
+    path: "Automation",
     icon: Automation,
   },
 ];
@@ -55,52 +55,52 @@ export const links = [
 export const Applinks = [
   {
     name: "Messages",
-    path: "/Messages",
+    path: "Messages",
     icon: Messages,
   },
   {
     name: "Files",
-    path: "/Files",
+    path: "Files",
     icon: Files,
   },
   {
     name: "Contracts",
-    path: "/Contracts",
+    path: "Contracts",
     icon: Contracts,
   },
   {
     name: "Products",
-    path: "/Products",
+    path: "Products",
     icon: Products,
   },
   {
     name: "Sales",
-    path: "/Sales",
+    path: "Sales",
     icon: Sales,
   },
   {
     name: "Forms",
-    path: "/Forms",
+    path: "Forms",
     icon: Forms,
   },
   {
     name: "Billing",
-    path: "/Billing",
+    path: "Billing",
     icon: Billing,
   },
   {
     name: "Helpdesk",
-    path: "/Helpdesk",
+    path: "Helpdesk",
     icon: Helpdesk,
   },
   {
     name: "Projects",
-    path: "/Projects",
+    path: "Projects",
     icon: Projects,
   },
   {
     name: "Schedule",
-    path: "/Schedule",
+    path: "Schedule",
     icon: Schedule,
   },
 ];
@@ -108,17 +108,17 @@ export const Applinks = [
 export const linkstwo = [
   {
     name: "Upgrade",
-    path: "/Upgrade",
+    path: "Upgrade",
     icon: Upgrade,
   },
   {
     name: "Invite teammates",
-    path: "/Inviteteammates",
+    path: "Inviteteammates",
     icon: Invite,
   },
   {
     name: "Help docs",
-    path: "/Helpdocs",
+    path: "Helpdocs",
     icon: Help,
   },
 ];
