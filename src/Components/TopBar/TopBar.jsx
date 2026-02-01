@@ -1,6 +1,6 @@
 import VectorIcon from "./Vector.svg";
 import VectorIcon2 from "./Vector2.svg";
-
+import Logout from "../../Auth/Logout";
 function TopBar() {
   return (
     <div
@@ -17,6 +17,8 @@ function TopBar() {
         lg:w-[calc(100%-210px)]
       "
     >
+      <Logout />
+
       <div className="flex items-center gap-3">
         <h1 className="text-[16px] font-medium">Clients</h1>
         <img className="w-[13px] h-[6px]" src={VectorIcon} alt="" />

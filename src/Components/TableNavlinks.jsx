@@ -7,12 +7,20 @@ import Table from "./Table";
 function TableNavlinks() {
   return (
     <div>
-      <div className="flex justify-between px-4">
-        <ul className="flex items-center gap-3">
-          <li className="text-[#25272D] font-medium">All · 40</li>
-          <li className="text-[#8F929C]">Guests · 45</li>
-          <li className="text-[#8F929C]">Partners · 17</li>
-          <li className="text-[#8F929C]">Blocked · 3</li>
+      <div className="flex justify-between px-4 h-9">
+        <ul className="flex items-center gap-3 ">
+          <li className="text-[#25272D] font-medium h-9  hover:border-b-2  transition-colors  duration-700  hover:border-b-[#74798B]">
+            All · 40
+          </li>
+          <li className="text-[#8F929C] h-9  hover:border-b-2  transition-all duration-700  hover:border-b-[#74798B]">
+            Guests · 45
+          </li>
+          <li className="text-[#8F929C] h-9  hover:border-b-2  transition   duration-700 hover:border-b-[#74798B]">
+            Partners · 17
+          </li>
+          <li className="text-[#8F929C] h-9  hover:border-b-2  transition   duration-700  hover:border-b-[#74798B]">
+            Blocked · 3
+          </li>
         </ul>
 
         <ul className="flex items-center gap-1.5 ">
@@ -38,7 +46,7 @@ function TableNavlinks() {
           </li>
         </ul>
       </div>
-      <div className=" w-full bg-[#E2E4E9] h-[1px] m-1"></div>
+      <div className=" w-full bg-[#E2E4E9] h-px mb-1"></div>
     </div>
   );
 }
