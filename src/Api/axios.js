@@ -8,6 +8,6 @@ const token = cookies.get("token");
 export const Axios = axios.create({
   baseURL: baseURL,
   headers: {
-    Authorization: `bearer ${token}`,
+    Authorization: `Bearer ${token}`,
   },
 });
