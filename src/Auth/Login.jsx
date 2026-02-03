@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import logo from "../assets/Icons/logo.svg";
 import Cookies from "universal-cookie";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginURL } from "../Api/Api";
 import { Axios } from "../Api/Axios";
+import Loading from "../Loading/Loading";
 
 function Login() {
   const navigate = useNavigate();
   const cookies = new Cookies();
+  const [error, seterror] = useState("");
+  const [load, setload] = useState(false);
+
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
 
   function handleLogin(e) {
     e.preventDefault();
+    setload(true);
 
     Axios.post(`${LoginURL}`, {
       email,
@@ -22,17 +27,27 @@ function Login() {
         console.log(res.data.token);
         cookies.set("token", res.data.token);
         navigate("/dashboard");
+        setload(false);
 
         setemail("");
         setpassword("");
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((err) => {
+        console.log(err);
+        setload(false);
+
+        seterror(err.response.data.message);
+
+        setTimeout(() => {
+          seterror("");
+        }, 5000);
       });
   }
 
   return (
     <div>
+      {load && <Loading />}
+
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
@@ -52,6 +67,13 @@ function Login() {
                 action="#"
                 onSubmit={handleLogin}
               >
+                {error.length > 1 ? (
+                  <div className="p-1 text-center mb-4 h-8 transition text-sm text-fg-danger-strong rounded-4xl bg-red-600 text-white">
+                    {error}
+                  </div>
+                ) : (
+                  ""
+                )}
                 <div>
                   <label
                     htmlFor="email"
@@ -133,12 +155,13 @@ function Login() {
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet?{" "}
-                  <a
-                    href="#"
+                  <Link
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                    to={"/register"}
                   >
+                    {" "}
                     Sign up
-                  </a>
+                  </Link>
                 </p>
               </form>
             </div>

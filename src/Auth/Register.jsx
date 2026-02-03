@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import logo from "../assets/Icons/logo.SVG";
 import Cookies from "universal-cookie";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RegisterURL } from "../Api/Api";
 import { Axios } from "../Api/Axios";
+import Loading from "../Loading/Loading";
 
 function Register() {
   const cookies = new Cookies();
   const navigate = useNavigate();
 
   const [error, seterror] = useState("");
+  const [load, setload] = useState(false);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -19,6 +22,7 @@ function Register() {
 
   function handleRegister(e) {
     e.preventDefault();
+    setload(true);
 
     Axios.post(`${RegisterURL}`, form)
       .then((res) => {
@@ -30,11 +34,14 @@ function Register() {
           password: "",
           password_confirmation: "",
         });
+        setload(false);
+
         navigate("/dashboard");
       })
       .catch((err) => {
         console.log(err);
         seterror(err.response.data.message);
+        setload(false);
 
         setTimeout(() => {
           seterror("");
@@ -44,6 +51,8 @@ function Register() {
 
   return (
     <div>
+      {load && <Loading />}
+
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
@@ -64,7 +73,7 @@ function Register() {
                 onSubmit={handleRegister}
               >
                 {error.length > 1 ? (
-                  <div className="p-1 text-center mb-4 h-8 transition text-sm text-fg-danger-strong rounded-4xl bg-red-600 text-white">
+                  <div className="p-1 text-center mb-4 h-8 tran text-sm text-fg-danger-strong rounded-4xl bg-red-600 text-white">
                     {error}
                   </div>
                 ) : (
@@ -185,12 +194,12 @@ function Register() {
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
-                  <a
-                    href="#"
+                  <Link
+                    to={"/login"}
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Login here
-                  </a>
+                  </Link>
                 </p>
               </form>
             </div>
