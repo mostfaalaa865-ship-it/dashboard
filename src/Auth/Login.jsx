@@ -1,48 +1,13 @@
 import React, { useState } from "react";
 import logo from "../assets/Icons/logo.svg";
-import Cookies from "universal-cookie";
-import { Link, useNavigate } from "react-router-dom";
-import { LoginURL } from "../Api/Api";
-import { Axios } from "../Api/Axios";
 import Loading from "../Loading/Loading";
+import useLogin from "../hooks/useLogin";
+import { Link } from "react-router-dom";
 
 function Login() {
-  const navigate = useNavigate();
-  const cookies = new Cookies();
-  const [error, seterror] = useState("");
-  const [load, setload] = useState(false);
-
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-
-  function handleLogin(e) {
-    e.preventDefault();
-    setload(true);
-
-    Axios.post(`${LoginURL}`, {
-      email,
-      password,
-    })
-      .then((res) => {
-        console.log(res.data.token);
-        cookies.set("token", res.data.token);
-        navigate("/dashboard");
-        setload(false);
-
-        setemail("");
-        setpassword("");
-      })
-      .catch((err) => {
-        console.log(err);
-        setload(false);
-
-        seterror(err.response.data.message);
-
-        setTimeout(() => {
-          seterror("");
-        }, 5000);
-      });
-  }
+  const { handleLogin, load, error } = useLogin(email, password);
 
   return (
     <div>

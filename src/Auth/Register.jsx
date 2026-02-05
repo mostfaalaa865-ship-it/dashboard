@@ -1,53 +1,16 @@
 import React, { useState } from "react";
 import logo from "../assets/Icons/logo.SVG";
-import Cookies from "universal-cookie";
-import { Link, useNavigate } from "react-router-dom";
-import { RegisterURL } from "../Api/Api";
-import { Axios } from "../Api/Axios";
-import Loading from "../Loading/Loading";
+import { Link } from "react-router-dom";
+import useRegister from "../hooks/useRegister";
 
 function Register() {
-  const cookies = new Cookies();
-  const navigate = useNavigate();
-
-  const [error, seterror] = useState("");
-  const [load, setload] = useState(false);
-
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     password_confirmation: "",
   });
-
-  function handleRegister(e) {
-    e.preventDefault();
-    setload(true);
-
-    Axios.post(`${RegisterURL}`, form)
-      .then((res) => {
-        console.log(res);
-        cookies.set("token", res.data.token);
-        setForm({
-          name: "",
-          email: "",
-          password: "",
-          password_confirmation: "",
-        });
-        setload(false);
-
-        navigate("/dashboard");
-      })
-      .catch((err) => {
-        console.log(err);
-        seterror(err.response.data.message);
-        setload(false);
-
-        setTimeout(() => {
-          seterror("");
-        }, 5000);
-      });
-  }
+  const { handleRegister, load, error } = useRegister(form);
 
   return (
     <div>

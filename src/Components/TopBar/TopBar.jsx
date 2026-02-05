@@ -1,32 +1,12 @@
-import React, { useState } from "react";
 import VectorIcon from "./Vector.svg";
 import VectorIcon2 from "./Vector2.svg";
 import Logout from "../../Auth/Logout";
-import Cookies from "universal-cookie";
-
-import { useEffect } from "react";
-import { Axios } from "../../Api/Axios";
-import { USER, baseURL } from "../../Api/Api";
+import { useContext } from "react";
+import { User } from "../../context/GetUser";
 
 function TopBar() {
-  const [user, setuser] = useState("");
-  const cookies = new Cookies();
-  const token = cookies.get("token");
-
-  useEffect(() => {
-    Axios.get(`${baseURL}${USER}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        setuser(res.data.user.name);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const userContext = useContext(User);
+  console.log(userContext?.user?.name);
 
   return (
     <div
@@ -79,7 +59,7 @@ function TopBar() {
         <Logout />
 
         <div className=" border-3 border-amber-300 px-2 py-1 font-semibold rounded-3xl text-white bg-black/80">
-          {user}
+          {useContext?.user?.name}
         </div>
       </div>
     </div>

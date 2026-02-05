@@ -1,22 +1,6 @@
-import { Axios } from "../Api/Axios";
-import { LogoutURL } from "../Api/Api";
-import Cookies from "universal-cookie";
-
+import useLogout from "../hooks/useLogout";
 function Logout() {
-  const cookies = new Cookies();
-
-  function handleLogout() {
-    Axios.post(`${LogoutURL}`)
-      .then((res) => {
-        console.log(res);
-        cookies.remove("token");
-
-        window.location.href = "/login";
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }
+  const handleLogout = useLogout();
 
   return (
     <div className="">
