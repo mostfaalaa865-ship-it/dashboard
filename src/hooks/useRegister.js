@@ -1,17 +1,17 @@
 import Cookies from "universal-cookie";
 import React, { useState } from "react";
 import { RegisterURL } from "../Api/Api";
+
 import { Axios } from "../Api/Axios";
-function useRegister(form) {
+function useRegister() {
   const [error, seterror] = useState("");
   const [load, setload] = useState(false);
   const cookies = new Cookies();
 
-  function handleRegister(e) {
-    e.preventDefault();
+  function handleRegister(data) {
     setload(true);
 
-    Axios.post(`${RegisterURL}`, form)
+    Axios.post(`${RegisterURL}`, data)
       .then((res) => {
         console.log(res);
         cookies.set("token", res.data.token);
