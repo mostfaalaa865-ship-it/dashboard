@@ -1,16 +1,27 @@
-import React, { useState } from "react";
 import logo from "../assets/Icons/logo.SVG";
+import Loading from "../Loading/Loading";
+
 import { Link } from "react-router-dom";
 import useRegister from "../hooks/useRegister";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerSchema } from "../schemas/registerSchema";
 
 function Register() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
+  const { handleRegister, load, error } = useRegister();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
   });
-  const { handleRegister, load, error } = useRegister(form);
+
+  const onSubmit = (data) => {
+    handleRegister(data);
+    console.log(data);
+  };
 
   return (
     <div>
@@ -33,7 +44,7 @@ function Register() {
               <form
                 className="space-y-4 md:space-y-6"
                 action="#"
-                onSubmit={handleRegister}
+                onSubmit={handleSubmit(onSubmit)}
               >
                 {error.length > 1 ? (
                   <div className="p-1 text-center mb-4 h-8 tran text-sm text-fg-danger-strong rounded-4xl bg-red-600 text-white">
@@ -50,18 +61,18 @@ function Register() {
                     Nmae
                   </label>
                   <input
-                    value={form.name}
-                    onChange={(e) => {
-                      setForm({ ...form, name: e.target.value });
-                    }}
+                    {...register("name")}
                     type="text"
-                    name="name"
                     id="name"
                     placeholder="Name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500   focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
                     required=""
                   />
-
+                  {errors.name && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.name.message}
+                    </p>
+                  )}
                   <label
                     htmlFor="email"
                     className="block mb-2 mt-3 text-sm font-medium text-gray-900 dark:text-white"
@@ -69,17 +80,18 @@ function Register() {
                     Your email
                   </label>
                   <input
-                    value={form.email}
-                    onChange={(e) => {
-                      setForm({ ...form, email: e.target.value });
-                    }}
                     type="email"
-                    name="email"
+                    {...register("email")}
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500   focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
                     placeholder="name@company.com"
                     required=""
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -89,17 +101,18 @@ function Register() {
                     Password
                   </label>
                   <input
-                    value={form.password}
-                    onChange={(e) => {
-                      setForm({ ...form, password: e.target.value });
-                    }}
                     type="password"
-                    name="password"
+                    {...register("password")}
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500    focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
                     required=""
                   />
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -109,20 +122,18 @@ function Register() {
                     Confirm password
                   </label>
                   <input
-                    value={form.password_confirmation}
-                    onChange={(e) => {
-                      setForm({
-                        ...form,
-                        password_confirmation: e.target.value,
-                      });
-                    }}
                     type="password"
-                    name="confirm-password"
+                    {...register("password_confirmation")}
                     id="confirm-password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500   focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
                     required=""
                   />
+                  {errors.password_confirmation && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.password_confirmation.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
