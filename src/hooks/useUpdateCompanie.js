@@ -1,24 +1,24 @@
 import React, { useContext, useState } from "react";
-import { Clients } from "../Api/Api";
+import { Companies } from "../Api/Api";
 import { Axios } from "../Api/Axios";
 import { ReRender } from "../context/ReRender";
 
-function useUpdateClient({ setShowModal }) {
-  const time = "a" + Date.now();
-
+function useUpdateCompanies({ setShowModal }) {
+  const time = "b" + Date.now();
   const { setisRender } = useContext(ReRender);
 
   const [load, setload] = useState(false);
 
-  function handleUpdateClient(id, formValues) {
+  function handleUpdateCompanies(id, formValues) {
     setload(true);
-    Axios.put(`${Clients}/${id}`, formValues)
+    Axios.put(`${Companies}/${id}`, formValues)
 
       .then((res) => {
         console.log(res);
+        setisRender(time);
+
         setShowModal(false);
         setload(false);
-        setisRender(time);
       })
       .catch((err) => {
         console.log(err);
@@ -26,7 +26,7 @@ function useUpdateClient({ setShowModal }) {
       });
   }
 
-  return { load, handleUpdateClient };
+  return { load, handleUpdateCompanies };
 }
 
-export default useUpdateClient;
+export default useUpdateCompanies;

@@ -1,16 +1,12 @@
 import React, { useState } from "react";
-import useDeleteClient from "../hooks/useDeleteClient";
-import ModalClient from "../ModalClient";
+import ModalClient from "../Modal";
 import menu from "../assets/menu/menu2.svg";
+import ModalCompanies from "../ModalCompanies";
 
-function Table({ data, headers }) {
+function Table({ data, headers, Delete }) {
   const [showModal, setShowModal] = useState(false);
   const [currentClient, setCurrentClient] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
-
-  const { handleDelete } = useDeleteClient();
-
-  console.log(headers);
 
   return (
     <div className="rounded-3xl px-4 ">
@@ -31,7 +27,10 @@ function Table({ data, headers }) {
             {data?.map((item) => (
               <tr key={item.id} className="text-sm text-[#25272D] text-[14px]">
                 {headers?.map((client) => (
-                  <td className="px-4 py-2"> {item[client.key]}</td>
+                  <td key={client.key} className="px-4 py-2">
+                    {" "}
+                    {item[client.key]}
+                  </td>
                 ))}
 
                 <td
@@ -41,17 +40,17 @@ function Table({ data, headers }) {
                   }
                 >
                   <button
-                    class="text-heading bg-neutral-primary box-border border border-transparent hover:bg-neutral-secondary-medium f"
+                    className="text-heading bg-neutral-primary box-border border border-transparent hover:bg-neutral-secondary-medium f"
                     type="button"
                   >
                     <img src={menu} />
                   </button>
 
                   {openMenuId === item.id && (
-                    <div className="absolute right-2 top-0  mt-1 w-22 absolute bg-white border rounded shadow z-50 flex items-center justify-center">
+                    <div className="absolute right-2 top-0  mt-1 w-22  bg-white border rounded shadow z-50 flex items-center justify-center">
                       <button
                         onClick={() => {
-                          setCurrentClient(item);
+                          setCurrentClient(item.id);
                           setShowModal(true);
                           setOpenMenuId(null);
                         }}
@@ -62,7 +61,8 @@ function Table({ data, headers }) {
 
                       <button
                         onClick={() => {
-                          handleDelete(item.id);
+                          Delete(item.id);
+
                           setOpenMenuId(null);
                         }}
                         className="block w-full text-left px-2 py-2 text-red-600 hover:bg-gray-100"
@@ -77,10 +77,15 @@ function Table({ data, headers }) {
           </tbody>
         </table>
       </div>
-      <ModalClient
+      {/* <ModalClient
         showModal={showModal}
         setShowModal={setShowModal}
-        client={currentClient}
+        id={currentClient}
+      /> */}
+      <ModalCompanies
+        showModal={showModal}
+        setShowModal={setShowModal}
+        id={currentClient}
       />
     </div>
   );

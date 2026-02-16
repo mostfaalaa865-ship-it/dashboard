@@ -3,13 +3,25 @@ import VectorIcon2 from "./Vector2.svg";
 import Logout from "../../Auth/Logout";
 import { useContext, useState } from "react";
 import { User } from "../../context/GetUser";
-import ModalClient from "../../ModalClient";
+import Modal from "../../Modal";
+import { useLocation } from "react-router-dom";
+import ModalCompanies from "../../ModalCompanies";
+import ModalClient from "../../Modal";
 
 function TopBar() {
   const [showModal, setShowModal] = useState(false);
-
   const userContext = useContext(User);
-  console.log(userContext?.user?.name);
+
+  const location = useLocation();
+  const path = location.pathname;
+
+  let title = "Dashboard";
+
+  if (path.includes("Clients")) {
+    title = "Clients";
+  } else if (path.includes("Companies")) {
+    title = "Companies";
+  }
 
   return (
     <div>
@@ -21,14 +33,13 @@ function TopBar() {
         flex items-center justify-between
         px-4
         z-40
-
         w-full
         lg:left-[210px]
         lg:w-[calc(100%-210px)]
       "
       >
         <div className="flex items-center gap-3">
-          <h1 className="text-[16px] font-medium">Clients</h1>
+          <h1 className="text-[16px] font-medium">{title}</h1>
           <img className="w-[13px] h-[6px]" src={VectorIcon} alt="" />
         </div>
 
@@ -57,7 +68,7 @@ function TopBar() {
           "
             onClick={() => setShowModal(true)}
           >
-            Create Client
+            Create {title}
           </button>
         </div>
         <div className="flex gap-4 ">
@@ -68,7 +79,12 @@ function TopBar() {
           </div>
         </div>
       </div>
-      <ModalClient showModal={showModal} setShowModal={setShowModal} />
+      {/* <Modal showModal={showModal} setShowModal={setShowModal}></Modal> */}
+      {title == "Clients" ? (
+        <ModalClient showModal={showModal} setShowModal={setShowModal} />
+      ) : (
+        <ModalCompanies showModal={showModal} setShowModal={setShowModal} />
+      )}
     </div>
   );
 }
