@@ -1,12 +1,12 @@
 import TableNavlinks from "./Components/TableNavlinks";
 import Table from "./Components/Table";
 import useClients from "./hooks/useClients";
-import ModalClient from "./ModalClient";
+import useDeleteClient from "./hooks/useDeleteClient";
 
 function Clients() {
   const Client = useClients();
+  const { handleDelete } = useDeleteClient();
 
-  console.log(Client);
   const headers = [
     { key: "full_name", value: "Name" },
     { key: "status", value: "Status" },
@@ -18,8 +18,16 @@ function Clients() {
 
   return (
     <div>
-      <TableNavlinks />
-      <Table data={Client.clients.data} headers={headers} />
+      <TableNavlinks
+        name={"Guests · 45"}
+        name2={"Partners · 17"}
+        name3={"Blocked · 3"}
+      />
+      <Table
+        data={Client.clients.data}
+        headers={headers}
+        Delete={handleDelete}
+      />
     </div>
   );
 }

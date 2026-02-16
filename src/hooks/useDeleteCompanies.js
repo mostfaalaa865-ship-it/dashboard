@@ -1,15 +1,15 @@
 import { useContext } from "react";
-import { Clients } from "../Api/Api";
+import { Companies } from "../Api/Api";
 import { Axios } from "../Api/Axios";
 import { ReRender } from "../context/ReRender";
 
-function useDeleteClient() {
-  const time = "a" + Date.now();
-
+function useDeleteCompanies() {
   const { setisRender } = useContext(ReRender);
 
-  function handleDelete(id) {
-    Axios.delete(`${Clients}/${id}`)
+  const time = "b" + Date.now();
+
+  function handleDeleteCompanies(id) {
+    Axios.delete(`${Companies}/${id}`)
       .then((res) => {
         console.log(res);
         setisRender(time);
@@ -19,7 +19,7 @@ function useDeleteClient() {
       });
   }
 
-  return { handleDelete };
+  return { handleDeleteCompanies };
 }
 
-export default useDeleteClient;
+export default useDeleteCompanies;

@@ -1,18 +1,17 @@
 import React, { useContext, useState } from "react";
-import { Clients } from "../Api/Api";
+import { Companies } from "../Api/Api";
 import { Axios } from "../Api/Axios";
 import { ReRender } from "../context/ReRender";
 
-function useUpdateClient({ setShowModal }) {
-  const time = "a" + Date.now();
-
-  const { setisRender } = useContext(ReRender);
+function useCreateCompany({ setShowModal }) {
+  const time = "b" + Date.now();
 
   const [load, setload] = useState(false);
+  const { setisRender } = useContext(ReRender);
 
-  function handleUpdateClient(id, formValues) {
+  function handleCreatecompany(formValues) {
     setload(true);
-    Axios.put(`${Clients}/${id}`, formValues)
+    Axios.post(`${Companies}`, formValues)
 
       .then((res) => {
         console.log(res);
@@ -26,7 +25,7 @@ function useUpdateClient({ setShowModal }) {
       });
   }
 
-  return { load, handleUpdateClient };
+  return { load, handleCreatecompany };
 }
 
-export default useUpdateClient;
+export default useCreateCompany;

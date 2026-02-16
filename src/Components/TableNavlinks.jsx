@@ -4,7 +4,7 @@ import Sort from "../assets/headerIcons/Vector-2.svg";
 import Fields from "../assets/headerIcons/icon.svg";
 import Table from "./Table";
 
-function TableNavlinks() {
+function TableNavlinks(props) {
   return (
     <div>
       <div className="flex justify-between px-4 h-9">
@@ -13,13 +13,13 @@ function TableNavlinks() {
             All · 40
           </li>
           <li className="text-[#8F929C] h-9  hover:border-b-2  transition-all duration-700  hover:border-b-[#74798B]">
-            Guests · 45
+            {props.name}
           </li>
           <li className="text-[#8F929C] h-9  hover:border-b-2  transition   duration-700 hover:border-b-[#74798B]">
-            Partners · 17
+            {props.name2}
           </li>
           <li className="text-[#8F929C] h-9  hover:border-b-2  transition   duration-700  hover:border-b-[#74798B]">
-            Blocked · 3
+            {props.name3}
           </li>
         </ul>
 
