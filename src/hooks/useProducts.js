@@ -1,30 +1,32 @@
 import { useContext, useEffect, useState } from "react";
+import { products } from "../Api/Api";
 import { Axios } from "../Api/Axios";
-import { baseURL, Clients } from "../Api/Api";
 import { ReRender } from "../context/ReRender";
 
-function useClients() {
+function useProducts() {
   const { isRender } = useContext(ReRender);
-  const [clients, setClients] = useState([]);
-  function getData() {
-    Axios.get(`${baseURL}${Clients}?page=1&per_page=15&search=`)
+  const [products2, serproducts2] = useState([]);
+  function getdata() {
+    Axios.get(`${products}`)
       .then((res) => {
-        setClients(res.data);
+        serproducts2(res.data.data);
+        console.log(res.data.data);
       })
       .catch((res) => {
         console.log(res);
       });
   }
   useEffect(() => {
-    getData();
+    getdata();
   }, []);
 
   useEffect(() => {
-    if (isRender.includes("a")) {
-      getData();
+    if (isRender.includes("c")) {
+      getdata();
     }
   }, [isRender]);
-  return { clients };
+
+  return { products2 };
 }
 
-export default useClients;
+export default useProducts;

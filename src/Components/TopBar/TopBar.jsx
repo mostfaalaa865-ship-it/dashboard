@@ -3,10 +3,11 @@ import VectorIcon2 from "./Vector2.svg";
 import Logout from "../../Auth/Logout";
 import { useContext, useState } from "react";
 import { User } from "../../context/GetUser";
-import Modal from "../../Modal";
+import Modal from "../../ModalClient";
 import { useLocation } from "react-router-dom";
 import ModalCompanies from "../../ModalCompanies";
-import ModalClient from "../../Modal";
+import ModalClient from "../../ModalClient";
+import ModalProduct from "../../ModalProduct";
 
 function TopBar() {
   const [showModal, setShowModal] = useState(false);
@@ -15,12 +16,14 @@ function TopBar() {
   const location = useLocation();
   const path = location.pathname;
 
-  let title = "Dashboard";
+  let title = "";
 
   if (path.includes("Clients")) {
     title = "Clients";
   } else if (path.includes("Companies")) {
     title = "Companies";
+  } else if (path.includes("Products")) {
+    title = "Products";
   }
 
   return (
@@ -82,8 +85,10 @@ function TopBar() {
       {/* <Modal showModal={showModal} setShowModal={setShowModal}></Modal> */}
       {title == "Clients" ? (
         <ModalClient showModal={showModal} setShowModal={setShowModal} />
-      ) : (
+      ) : title == "Companies" ? (
         <ModalCompanies showModal={showModal} setShowModal={setShowModal} />
+      ) : (
+        <ModalProduct showModal={showModal} setShowModal={setShowModal} />
       )}
     </div>
   );

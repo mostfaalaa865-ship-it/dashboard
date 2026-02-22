@@ -1,6 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function Modal({ id, setShowModal, handleSubmit, children }) {
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  const location = useLocation();
+  const path = location.pathname;
+
+  let title = "Dashboard";
+
+  if (path.includes("Clients")) {
+    title = "create  Clients";
+  } else if (path.includes("Companies")) {
+    title = "create  Companies";
+  } else if (path.includes("Products")) {
+    title = "Add Product";
+  }
+
   return (
     <>
       <div className="w-full h-full fixed top-0 left-0 z-60 bg-black/50"></div>
@@ -10,13 +33,13 @@ function Modal({ id, setShowModal, handleSubmit, children }) {
           onClick={() => setShowModal(false)}
         >
           <div
-            className="bg-white rounded-lg shadow-lg max-w-120 w-full relative"
+            className="bg-white rounded-lg shadow-lg max-w-120 w-full relative  max-h-[105vh]  overflow-y-auto "
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center bg-[#FBFBFC]  rounded-lg p-6 h-14.5 ">
               <h3 className="text-lg font-medium">
                 {" "}
-                {id ? "update client" : "create client"}
+                {id ? "update " + title : title}
               </h3>
               <svg
                 class="w-5 h-5"
@@ -38,16 +61,16 @@ function Modal({ id, setShowModal, handleSubmit, children }) {
               </svg>
             </div>
             {children}
-            <div className="flex  gap-4 items-center   rounded-lg p-9 h-14.5 ">
+            <div className="flex  gap-4 items-center   rounded-lg p-8 h-14.5 ">
               <button
                 onClick={handleSubmit}
-                className="h-9 px-4 flex justify-center items-center cursor-pointer text-white rounded-sm bg-[#6696F5] hover:bg-[#6287E6] transition whitespace-nowrap"
+                className="h-8 px-4 flex justify-center items-center cursor-pointer text-white rounded-sm bg-[#6696F5] hover:bg-[#6287E6] transition whitespace-nowrap"
               >
                 {id ? "Update" : "Create "}
               </button>
               <button
                 type="button"
-                className="h-9 px-4 flex justify-center items-center cursor-pointer  border border-[#E2E4E9]   transition hover:bg-[#F3F4F6] gap-2  "
+                className="h-8 px-4 flex justify-center items-center cursor-pointer  border border-[#E2E4E9]   transition hover:bg-[#F3F4F6] gap-2  "
               >
                 Cancel
               </button>

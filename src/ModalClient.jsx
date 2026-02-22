@@ -111,6 +111,9 @@ function ModalClient({ showModal, setShowModal, id }) {
                 name={"full_name"}
                 id={"Full name"}
                 placeholder={"Name"}
+                className={
+                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                }
                 onChange={handleChange}
               />
             </div>
@@ -127,6 +130,9 @@ function ModalClient({ showModal, setShowModal, id }) {
                 name={"email"}
                 id={"email"}
                 placeholder={"name@company.com"}
+                className={
+                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                }
                 onChange={handleChange}
               />
             </div>
@@ -143,6 +149,9 @@ function ModalClient({ showModal, setShowModal, id }) {
                 name={"phone"}
                 id={"Phone"}
                 placeholder={"+1 415-525-3888"}
+                className={
+                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                }
                 onChange={handleChange}
               />
             </div>
@@ -159,6 +168,9 @@ function ModalClient({ showModal, setShowModal, id }) {
                 name={"location"}
                 id={"Location"}
                 placeholder={"San Francisco, USA"}
+                className={
+                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                }
                 onChange={handleChange}
               />
             </div>

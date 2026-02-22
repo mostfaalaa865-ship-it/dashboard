@@ -10,16 +10,16 @@ function TableNavlinks(props) {
       <div className="flex justify-between px-4 h-9">
         <ul className="flex items-center gap-3 ">
           <li className="text-[#25272D] font-medium h-9  hover:border-b-2  transition-colors  duration-700  hover:border-b-[#74798B]">
-            All · 40
-          </li>
-          <li className="text-[#8F929C] h-9  hover:border-b-2  transition-all duration-700  hover:border-b-[#74798B]">
             {props.name}
           </li>
-          <li className="text-[#8F929C] h-9  hover:border-b-2  transition   duration-700 hover:border-b-[#74798B]">
+          <li className="text-[#8F929C] h-9  hover:border-b-2  transition-all duration-700  hover:border-b-[#74798B]">
             {props.name2}
           </li>
-          <li className="text-[#8F929C] h-9  hover:border-b-2  transition   duration-700  hover:border-b-[#74798B]">
+          <li className="text-[#8F929C] h-9  hover:border-b-2  transition   duration-700 hover:border-b-[#74798B]">
             {props.name3}
+          </li>
+          <li className="text-[#8F929C] h-9  hover:border-b-2  transition   duration-700  hover:border-b-[#74798B]">
+            {props.name4}
           </li>
         </ul>
 
