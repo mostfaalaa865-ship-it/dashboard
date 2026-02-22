@@ -10,12 +10,13 @@ import useCreateCompany from "./hooks/useCreateCompany";
 function ModalCompanies({ showModal, setShowModal, id }) {
   const openImage = useRef(null);
   const company = useGetcompany(id);
-
+  const [categories, setCategories] = useState([]);
   const [formValues, setFormValues] = useState({
     name: "",
     link: "",
     phone: "",
     location: "",
+    last_iteraction: "",
   });
 
   useEffect(() => {
@@ -45,11 +46,15 @@ function ModalCompanies({ showModal, setShowModal, id }) {
   }
   function handleSubmit() {
     const formData = new FormData();
+    for (let i = 0; i < categories.length; i++) {
+      formData.append("categories[]", categories[i]);
+    }
 
     formData.append("name", formValues.name);
     formData.append("link", formValues.link);
     formData.append("phone", formValues.phone);
     formData.append("location", formValues.location);
+    formData.append("last_interaction", formValues.last_iteraction);
 
     if (image) {
       formData.append("image", image);
@@ -61,6 +66,17 @@ function ModalCompanies({ showModal, setShowModal, id }) {
       handleCreatecompany(formData);
     }
   }
+  function handleclick() {
+    setCategories((prev) => [...prev, ""]);
+  }
+  function deleteCategory(index) {
+    setCategories((prev) => prev.filter((key, i) => i !== index));
+  }
+
+  function updateCategory(index, value) {
+    setCategories((prev) => prev.map((cat, i) => (i === index ? value : cat)));
+  }
+  console.log(categories);
 
   return (
     <div>
@@ -99,7 +115,7 @@ function ModalCompanies({ showModal, setShowModal, id }) {
 
               <label
                 htmlFor="Full name"
-                className="block mb-2 mt-3 text-sm font-medium text-gray-900"
+                className="block mb-2 mt-2 text-sm font-medium text-gray-900"
               >
                 Name
               </label>
@@ -109,13 +125,16 @@ function ModalCompanies({ showModal, setShowModal, id }) {
                 name={"name"}
                 id={"name"}
                 placeholder={"Name"}
+                className={
+                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                }
                 onChange={handleChange}
               />
             </div>
             <div>
               <label
                 htmlFor="link"
-                className="block mb-2 mt-3 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Link
               </label>
@@ -125,6 +144,9 @@ function ModalCompanies({ showModal, setShowModal, id }) {
                 name={"link"}
                 id={"link"}
                 placeholder={"evernote.com"}
+                className={
+                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                }
                 onChange={handleChange}
               />
             </div>
@@ -141,13 +163,16 @@ function ModalCompanies({ showModal, setShowModal, id }) {
                 name={"phone"}
                 id={"Phone"}
                 placeholder={"+1 415-525-3888"}
+                className={
+                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                }
                 onChange={handleChange}
               />
             </div>
             <div>
               <label
                 htmlFor="Location"
-                className="block mb-2 mt-3 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Location
               </label>
@@ -157,8 +182,65 @@ function ModalCompanies({ showModal, setShowModal, id }) {
                 name={"location"}
                 id={"Location"}
                 placeholder={"San Francisco, USA"}
+                className={
+                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                }
                 onChange={handleChange}
               />
+            </div>
+            <div>
+              <label
+                htmlFor="last_iteraction"
+                className="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Last iteraction
+              </label>
+              <Input
+                type={"date"}
+                value={formValues.last_iteraction}
+                name={"last_iteraction"}
+                id={"last_iteraction"}
+                placeholder={"2026"}
+                className={
+                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                }
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <div className="flex items-center justify-between">
+                <h3 className="block mb-2 mt-3 text-sm font-medium text-gray-900 dark:text-white">
+                  {" "}
+                  Categories
+                </h3>
+                <div
+                  className="cursor-pointer font-medium"
+                  onClick={handleclick}
+                >
+                  +
+                </div>
+              </div>
+              {categories.map((item, index) => (
+                <div className="mt-1 flex items-center justify-between gap-3">
+                  <Input
+                    type={"text"}
+                    value={item}
+                    name={"Categories"}
+                    id={"Categories"}
+                    placeholder={"Category........."}
+                    className={
+                      "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
+                    }
+                    onChange={(e) => updateCategory(index, e.target.value)}
+                  />
+                  <h4
+                    className="text-red-500 cursor-pointer text-[20px]  w-4"
+                    onClick={() => deleteCategory(index)}
+                  >
+                    x
+                  </h4>
+                </div>
+              ))}
             </div>
           </form>
         </Modal>

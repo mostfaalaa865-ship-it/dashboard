@@ -19,14 +19,16 @@ function Clients() {
   return (
     <div>
       <TableNavlinks
-        name={"Guests · 45"}
-        name2={"Partners · 17"}
-        name3={"Blocked · 3"}
+        name={"All · 40"}
+        name2={"Guests · 45"}
+        name3={"Partners · 17"}
+        name4={"Blocked · 3"}
       />
       <Table
         data={Client.clients.data}
         headers={headers}
         Delete={handleDelete}
+        modal={"client"}
       />
     </div>
   );

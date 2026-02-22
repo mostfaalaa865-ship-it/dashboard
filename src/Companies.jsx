@@ -21,15 +21,17 @@ function Companies() {
   return (
     <div>
       <TableNavlinks
-        name={"US companies · 25"}
-        name2={"North Europe · 17"}
-        name3={"Africa · 3"}
+        name={"All · 40"}
+        name2={"US companies · 25"}
+        name3={"North Europe · 17"}
+        name4={"Africa · 3"}
       />
       <Table
         data={companies.data}
         headers={headers}
         name={"companies"}
         Delete={handleDeleteCompanies}
+        modal={"companies"}
       />
     </div>
   );

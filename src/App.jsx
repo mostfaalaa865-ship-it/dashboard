@@ -5,6 +5,7 @@ import Login from "./Auth/Login";
 import Register from "./Auth/Register";
 import RequireAuth from "./RequireAuth";
 import Companies from "./Companies";
+import Products from "./Products";
 function App() {
   return (
     <>
@@ -13,6 +14,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="Clients" element={<Clients />} />
             <Route path="Companies" element={<Companies />} />
+            <Route path="Products" element={<Products />} />
           </Route>
         </Route>
 

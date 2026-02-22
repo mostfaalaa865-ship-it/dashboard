@@ -5,3 +5,4 @@ export const LogoutURL = "/auth/logout";
 export const USER = "/auth/user";
 export const Clients = "/clients";
 export const Companies = "/companies";
+export const products = "/products";

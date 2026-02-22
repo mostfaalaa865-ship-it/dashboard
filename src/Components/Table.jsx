@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import ModalClient from "../Modal";
+import ModalClient from "../ModalClient";
 import menu from "../assets/menu/menu2.svg";
 import ModalCompanies from "../ModalCompanies";
+import ModalProduct from "../ModalProduct";
 
-function Table({ data, headers, Delete }) {
+function Table({ data, headers, Delete, modal }) {
   const [showModal, setShowModal] = useState(false);
   const [currentClient, setCurrentClient] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -27,8 +28,18 @@ function Table({ data, headers, Delete }) {
             {data?.map((item) => (
               <tr key={item.id} className="text-sm text-[#25272D] text-[14px]">
                 {headers?.map((client) => (
-                  <td key={client.key} className="px-4 py-2">
-                    {" "}
+                  <td
+                    key={client.key}
+                    className={`px-4 py-2 ${
+                      client.key === "email" || client.key === "link"
+                        ? "text-[#5B75D2] font-medium underline"
+                        : client.key === "name" ||
+                            client.key === "full_name" ||
+                            client.key === "title"
+                          ? "text-[#25372D] font-medium line-clamp-3"
+                          : "text-[#25272D] text-[15px]"
+                    }`}
+                  >
                     {item[client.key]}
                   </td>
                 ))}
@@ -62,7 +73,6 @@ function Table({ data, headers, Delete }) {
                       <button
                         onClick={() => {
                           Delete(item.id);
-
                           setOpenMenuId(null);
                         }}
                         className="block w-full text-left px-2 py-2 text-red-600 hover:bg-gray-100"
@@ -77,16 +87,25 @@ function Table({ data, headers, Delete }) {
           </tbody>
         </table>
       </div>
-      {/* <ModalClient
-        showModal={showModal}
-        setShowModal={setShowModal}
-        id={currentClient}
-      /> */}
-      <ModalCompanies
-        showModal={showModal}
-        setShowModal={setShowModal}
-        id={currentClient}
-      />
+      {modal == "client" ? (
+        <ModalClient
+          showModal={showModal}
+          setShowModal={setShowModal}
+          id={currentClient}
+        />
+      ) : modal == "companies" ? (
+        <ModalCompanies
+          showModal={showModal}
+          setShowModal={setShowModal}
+          id={currentClient}
+        />
+      ) : (
+        <ModalProduct
+          showModal={showModal}
+          setShowModal={setShowModal}
+          id={currentClient}
+        />
+      )}
     </div>
   );
 }
