@@ -1,33 +1,64 @@
 import { useRef, useState, useEffect } from "react";
-import profileImage from "./assets/ava.svg";
-import Loading from "./Loading/Loading";
-import Modal from "./Components/modals/Modal";
-import Input from "./Components/Input";
-import useGetcompany from "./hooks/useGetcompany";
-import useUpdateCompanies from "./hooks/useUpdateCompanie";
-import useCreateCompany from "./hooks/useCreateCompany";
+import profileImage from "../../assets/ava.svg";
+import Loading from "../../Loading/Loading";
+import Modal from "./Modal";
+import Input from "../Input";
+import useGetcompany from "../../hooks/Companies/useGetcompany";
+import useUpdateCompanies from "../../hooks/Companies/useUpdateCompanie";
+import useCreateCompany from "../../hooks/Companies/useCreateCompany";
+import { useFormik } from "formik";
+import { CompaniesSchema } from "../../schemas/CompaniesSchema";
 
 function ModalCompanies({ showModal, setShowModal, id }) {
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      link: "",
+      phone: "",
+      location: "",
+      last_iteraction: "",
+    },
+    validationSchema: CompaniesSchema,
+    validateOnBlur: true,
+    onSubmit: (values) => {
+      const formData = new FormData();
+      for (let i = 0; i < categories.length; i++) {
+        formData.append("categories[]", categories[i]);
+      }
+
+      formData.append("name", values.name);
+      formData.append("link", values.link);
+      formData.append("phone", values.phone);
+      formData.append("location", values.location);
+      formData.append("last_interaction", values.last_iteraction);
+
+      if (image) {
+        formData.append("image", image);
+      }
+
+      if (id) {
+        handleUpdateCompanies(id, formData);
+      } else {
+        handleCreatecompany(formData);
+      }
+    },
+  });
+
   const openImage = useRef(null);
   const company = useGetcompany(id);
   const [categories, setCategories] = useState([]);
-  const [formValues, setFormValues] = useState({
-    name: "",
-    link: "",
-    phone: "",
-    location: "",
-    last_iteraction: "",
-  });
 
   useEffect(() => {
     if (!company) return;
 
-    setFormValues({
+    formik.setValues({
       name: company.company.name || "",
       link: company.company.link || "",
       phone: company.company.phone || "",
       location: company.company.location || "",
+      last_iteraction: company.company.last_interaction || "",
     });
+    setCategories(company.company.categories || []);
   }, [company]);
 
   const [image, setImage] = useState(null);
@@ -38,34 +69,7 @@ function ModalCompanies({ showModal, setShowModal, id }) {
   const { handleUpdateCompanies, load: updateLoading } = useUpdateCompanies({
     setShowModal,
   });
-  function handleChange(e) {
-    setFormValues((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  }
-  function handleSubmit() {
-    const formData = new FormData();
-    for (let i = 0; i < categories.length; i++) {
-      formData.append("categories[]", categories[i]);
-    }
 
-    formData.append("name", formValues.name);
-    formData.append("link", formValues.link);
-    formData.append("phone", formValues.phone);
-    formData.append("location", formValues.location);
-    formData.append("last_interaction", formValues.last_iteraction);
-
-    if (image) {
-      formData.append("image", image);
-    }
-
-    if (id) {
-      handleUpdateCompanies(id, formData);
-    } else {
-      handleCreatecompany(formData);
-    }
-  }
   function handleclick() {
     setCategories((prev) => [...prev, ""]);
   }
@@ -76,13 +80,16 @@ function ModalCompanies({ showModal, setShowModal, id }) {
   function updateCategory(index, value) {
     setCategories((prev) => prev.map((cat, i) => (i === index ? value : cat)));
   }
-  console.log(categories);
 
   return (
     <div>
       {showModal && (
-        <Modal id={id} handleSubmit={handleSubmit} setShowModal={setShowModal}>
-          <form className="space-y-4 p-6 border-t border-b border-[#E2E4E9] mb-1 ">
+        <Modal id={id} setShowModal={setShowModal}>
+          <form
+            id="form"
+            onSubmit={formik.handleSubmit}
+            className="space-y-4 p-6 border-t border-b border-[#E2E4E9] mb-1 "
+          >
             <div>
               <input
                 onChange={(e) => setImage(e.target.files[0])}
@@ -121,15 +128,20 @@ function ModalCompanies({ showModal, setShowModal, id }) {
               </label>
               <Input
                 type={"text"}
-                value={formValues.name}
+                onBlur={formik.handleBlur}
                 name={"name"}
                 id={"name"}
                 placeholder={"Name"}
-                className={
-                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                }
-                onChange={handleChange}
+                className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.name && formik.errors.name ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                onChange={formik.handleChange}
+                value={formik.values.name}
               />
+
+              {formik.touched.name && formik.errors.name && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.name}
+                </p>
+              )}
             </div>
             <div>
               <label
@@ -140,15 +152,19 @@ function ModalCompanies({ showModal, setShowModal, id }) {
               </label>
               <Input
                 type={"text"}
-                value={formValues.link}
+                onBlur={formik.handleBlur}
                 name={"link"}
                 id={"link"}
                 placeholder={"evernote.com"}
-                className={
-                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                }
-                onChange={handleChange}
+                className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.link && formik.errors.link ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                onChange={formik.handleChange}
+                value={formik.values.link}
               />
+              {formik.touched.link && formik.errors.link && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.link}
+                </p>
+              )}
             </div>
             <div>
               <label
@@ -159,15 +175,19 @@ function ModalCompanies({ showModal, setShowModal, id }) {
               </label>
               <Input
                 type={"text"}
-                value={formValues.phone}
+                onBlur={formik.handleBlur}
                 name={"phone"}
                 id={"Phone"}
                 placeholder={"+1 415-525-3888"}
-                className={
-                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                }
-                onChange={handleChange}
+                className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.phone && formik.errors.phone ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                onChange={formik.handleChange}
+                value={formik.values.phone}
               />
+              {formik.touched.phone && formik.errors.phone && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.phone}
+                </p>
+              )}
             </div>
             <div>
               <label
@@ -178,15 +198,19 @@ function ModalCompanies({ showModal, setShowModal, id }) {
               </label>
               <Input
                 type={"text"}
-                value={formValues.location}
+                onBlur={formik.handleBlur}
                 name={"location"}
                 id={"Location"}
                 placeholder={"San Francisco, USA"}
-                className={
-                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                }
-                onChange={handleChange}
+                className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.location && formik.errors.location ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                onChange={formik.handleChange}
+                value={formik.values.location}
               />
+              {formik.touched.location && formik.errors.location && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.location}
+                </p>
+              )}
             </div>
             <div>
               <label
@@ -197,15 +221,20 @@ function ModalCompanies({ showModal, setShowModal, id }) {
               </label>
               <Input
                 type={"date"}
-                value={formValues.last_iteraction}
+                onBlur={formik.handleBlur}
                 name={"last_iteraction"}
                 id={"last_iteraction"}
                 placeholder={"2026"}
-                className={
-                  "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                }
-                onChange={handleChange}
+                className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.last_iteraction && formik.errors.last_iteraction ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                onChange={formik.handleChange}
+                value={formik.values.last_iteraction}
               />
+              {formik.touched.last_iteraction &&
+                formik.errors.last_iteraction && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formik.errors.last_iteraction}
+                  </p>
+                )}
             </div>
             <div>
               <div className="flex items-center justify-between">
@@ -228,9 +257,7 @@ function ModalCompanies({ showModal, setShowModal, id }) {
                     name={"Categories"}
                     id={"Categories"}
                     placeholder={"Category........."}
-                    className={
-                      "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                    }
+                    className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.Categories && formik.errors.Categories ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
                     onChange={(e) => updateCategory(index, e.target.value)}
                   />
                   <h4

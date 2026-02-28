@@ -7,6 +7,7 @@ function Input(props) {
       id={props.id}
       className={props.className}
       placeholder={props.placeholder}
+      onBlur={props.onBlur}
       required=""
       onChange={props.onChange}
     />

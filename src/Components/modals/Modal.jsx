@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-function Modal({ id, setShowModal, handleSubmit, children }) {
+function Modal({ id, setShowModal, children }) {
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -63,7 +63,8 @@ function Modal({ id, setShowModal, handleSubmit, children }) {
             {children}
             <div className="flex  gap-4 items-center   rounded-lg p-8 h-14.5 ">
               <button
-                onClick={handleSubmit}
+                form="form"
+                type="submit"
                 className="h-8 px-4 flex justify-center items-center cursor-pointer text-white rounded-sm bg-[#6696F5] hover:bg-[#6287E6] transition whitespace-nowrap"
               >
                 {id ? "Update" : "Create "}

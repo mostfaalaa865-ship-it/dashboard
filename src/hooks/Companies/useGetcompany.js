@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Axios } from "../Api/Axios";
-import { Companies } from "../Api/Api";
+import { Companies } from "../../Api/Api";
+import { Axios } from "../../Api/Axios";
 
 function useGetcompany(id) {
   const [company, setcompany] = useState();
-  console.log(id);
 
   useEffect(() => {
     if (!id) return;
@@ -13,8 +12,8 @@ function useGetcompany(id) {
       .then((res) => {
         setcompany(res.data);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((err) => {
+        //err
       });
   }, [id]);
   return company;

@@ -1,13 +1,12 @@
-import Table from "./Components/Table";
-import TableNavlinks from "./Components/TableNavlinks";
-import useCompanieS from "./hooks/useCompanies";
-import useDeleteCompanies from "./hooks/useDeleteCompanies";
+import Table from "../Components/Table";
+import TableNavlinks from "../Components/TableNavlinks";
+import useCompanieS from "../hooks/Companies/useCompanies";
+import useDeleteCompanies from "../hooks/Companies/useDeleteCompanies";
 
 function Companies() {
   const { handleDeleteCompanies } = useDeleteCompanies();
 
   const { companies } = useCompanieS();
-  console.log(companies.data);
 
   const headers = [
     { key: "name", value: "Name" },

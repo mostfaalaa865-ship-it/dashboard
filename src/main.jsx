@@ -8,11 +8,13 @@ import GetUser from "./context/GetUser.jsx";
 import Render from "./context/ReRender.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <GetUser>
-      <Render>
-        <App />
-      </Render>
-    </GetUser>
-  </BrowserRouter>,
+  <StrictMode>
+    <BrowserRouter>
+      <GetUser>
+        <Render>
+          <App />
+        </Render>
+      </GetUser>
+    </BrowserRouter>
+  </StrictMode>,
 );

@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Axios } from "../Api/Axios";
-import { Clients } from "../Api/Api";
+import { useEffect, useState } from "react";
+import { Axios } from "../../Api/Axios";
+import { Clients } from "../../Api/Api";
 
 function useGetclient(id) {
   const [client, setClient] = useState();
-  console.log(id);
 
   useEffect(() => {
     if (!id) return;
@@ -13,8 +12,8 @@ function useGetclient(id) {
       .then((res) => {
         setClient(res.data);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch(() => {
+        // log err
       });
   }, [id]);
   return client;

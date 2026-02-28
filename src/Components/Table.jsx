@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import ModalClient from "../ModalClient";
+import ModalClient from "./modals/ModalClient";
 import menu from "../assets/menu/menu2.svg";
-import ModalCompanies from "../ModalCompanies";
-import ModalProduct from "../ModalProduct";
+import ModalCompanies from "./modals/ModalCompanies";
+import ModalProduct from "./modals/ModalProduct";
 
 function Table({ data, headers, Delete, modal }) {
   const [showModal, setShowModal] = useState(false);

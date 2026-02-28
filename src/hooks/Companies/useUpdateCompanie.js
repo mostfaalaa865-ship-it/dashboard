@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import { Companies } from "../Api/Api";
-import { Axios } from "../Api/Axios";
-import { ReRender } from "../context/ReRender";
+import { Companies } from "../../Api/Api";
+import { ReRender } from "../../context/ReRender";
+import { Axios } from "../../Api/Axios";
 
 function useUpdateCompanies({ setShowModal }) {
   const time = "b" + Date.now();
@@ -11,17 +11,17 @@ function useUpdateCompanies({ setShowModal }) {
 
   function handleUpdateCompanies(id, formValues) {
     setload(true);
+
     Axios.put(`${Companies}/${id}`, formValues)
 
       .then((res) => {
-        console.log(res);
         setisRender(time);
 
         setShowModal(false);
         setload(false);
       })
       .catch((err) => {
-        console.log(err);
+        //err
         setload(false);
       });
   }

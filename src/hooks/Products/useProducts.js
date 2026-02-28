@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { products } from "../Api/Api";
-import { Axios } from "../Api/Axios";
-import { ReRender } from "../context/ReRender";
+import { products } from "../../Api/Api";
+import { Axios } from "../../Api/Axios";
+import { ReRender } from "../../context/ReRender";
 
 function useProducts() {
   const { isRender } = useContext(ReRender);
@@ -10,10 +10,9 @@ function useProducts() {
     Axios.get(`${products}`)
       .then((res) => {
         serproducts2(res.data.data);
-        console.log(res.data.data);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((err) => {
+        //err
       });
   }
   useEffect(() => {

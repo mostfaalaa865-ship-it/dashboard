@@ -3,11 +3,10 @@ import VectorIcon2 from "./Vector2.svg";
 import Logout from "../../Auth/Logout";
 import { useContext, useState } from "react";
 import { User } from "../../context/GetUser";
-import Modal from "../../ModalClient";
 import { useLocation } from "react-router-dom";
-import ModalCompanies from "../../ModalCompanies";
-import ModalClient from "../../ModalClient";
-import ModalProduct from "../../ModalProduct";
+import ModalCompanies from "../modals/ModalCompanies";
+import ModalClient from "../modals/ModalClient";
+import ModalProduct from "../modals/ModalProduct";
 
 function TopBar() {
   const [showModal, setShowModal] = useState(false);
