@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { Axios } from "../Api/Axios";
-import { products } from "../Api/Api";
-import { ReRender } from "../context/ReRender";
+import { Axios } from "../../Api/Axios";
+import { products } from "../../Api/Api";
+import { ReRender } from "../../context/ReRender";
 
 function useDeleteProduct() {
   const time = "c" + Date.now();

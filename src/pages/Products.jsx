@@ -1,8 +1,8 @@
 import React from "react";
-import Table from "./Components/Table";
-import TableNavlinks from "./Components/TableNavlinks";
-import useProducts from "./hooks/useProducts";
-import useDeleteProduct from "./hooks/useDeleteProduct";
+import Table from "../Components/Table";
+import TableNavlinks from "../Components/TableNavlinks";
+import useProducts from "../hooks/Products/useProducts";
+import useDeleteProduct from "../hooks/Products/useDeleteProduct";
 
 function Products() {
   const { products2 } = useProducts();

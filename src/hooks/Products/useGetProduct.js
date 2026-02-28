@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Axios } from "../Api/Axios";
-import { products } from "../Api/Api";
+import { Axios } from "../../Api/Axios";
+import { products } from "../../Api/Api";
 
 function useGetProduct(id) {
   const [prodcut, setprodcut] = useState("");

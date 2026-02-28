@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import { products } from "../Api/Api";
-import { Axios } from "../Api/Axios";
-import { ReRender } from "../context/ReRender";
+import { products } from "../../Api/Api";
+import { Axios } from "../../Api/Axios";
+import { ReRender } from "../../context/ReRender";
 
 function useUpdateProduct({ setShowModal }) {
   const time = "c" + Date.now();
@@ -14,14 +14,13 @@ function useUpdateProduct({ setShowModal }) {
     Axios.put(`${products}/${id}`, formValues)
 
       .then((res) => {
-        console.log(res);
         setisRender(time);
 
         setShowModal(false);
         setload(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        //err
         setload(false);
       });
   }

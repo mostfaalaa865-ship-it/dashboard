@@ -1,17 +1,17 @@
 import React, { useContext, useState } from "react";
-import { Clients } from "../Api/Api";
-import { Axios } from "../Api/Axios";
-import { ReRender } from "../context/ReRender";
+import { products } from "../../Api/Api";
+import { Axios } from "../../Api/Axios";
+import { ReRender } from "../../context/ReRender";
 
-function useCerateClient({ setShowModal }) {
-  const time = "a" + Date.now();
+function useCreateProdcut({ setShowModal }) {
+  const time = "c" + Date.now();
 
   const [load, setload] = useState(false);
   const { setisRender } = useContext(ReRender);
 
   function handleCreateClient(formValues) {
     setload(true);
-    Axios.post(`${Clients}`, formValues)
+    Axios.post(`${products}`, formValues)
 
       .then((res) => {
         console.log(res);
@@ -28,4 +28,4 @@ function useCerateClient({ setShowModal }) {
   return { load, handleCreateClient };
 }
 
-export default useCerateClient;
+export default useCreateProdcut;

@@ -1,35 +1,60 @@
 import { useRef, useState, useEffect } from "react";
-import Loading from "./Loading/Loading";
-import Modal from "./Components/modals/Modal";
-import Input from "./Components/Input";
-import useCreateProdcut from "./hooks/useCreateProdcut";
-import useUpdateProduct from "./hooks/useUpdateProduct";
-import useGetProduct from "./hooks/useGetProduct";
+import Loading from "../../Loading/Loading";
+import Modal from "./Modal";
+import Input from "../Input";
+import useCreateProdcut from "../../hooks/Products/useCreateProdcut";
+import useUpdateProduct from "../../hooks/Products/useUpdateProduct";
+import useGetProduct from "../../hooks/Products/useGetProduct";
+import { ProductSchema } from "../../schemas/ProductSchema";
+import { useFormik } from "formik";
 
 function ModalProduct({ showModal, setShowModal, id }) {
   const openImage = useRef(null);
   const product = useGetProduct(id);
-  console.log(product);
 
-  const [formValues, setFormValues] = useState({
-    Product_name: "",
-    SKU: "",
-    Qty: "",
-    Category: "",
-    Price: "",
-    sales: "",
+  const formik = useFormik({
+    initialValues: {
+      Product_name: "",
+      Category: "",
+      Qty: "",
+      SKU: "",
+      Price: "",
+      sales: "",
+    },
+    validationSchema: ProductSchema,
+    validateOnBlur: true,
+    onSubmit: (values) => {
+      const formData = new FormData();
+
+      formData.append("title", values.Product_name);
+      formData.append("sku", values.SKU);
+      formData.append("price", values.Price);
+      formData.append("qty", values.Qty);
+      formData.append("tags[]", values.Category);
+      formData.append("sales", values.sales);
+
+      if (image) {
+        formData.append("image", image);
+      }
+
+      if (id) {
+        handleUpdateproducts(id, formData);
+      } else {
+        handleCreateClient(formData);
+      }
+    },
   });
 
   useEffect(() => {
     if (!product) return;
 
-    setFormValues({
+    formik.setValues({
       Product_name: product.product.title || "",
-      SKU: product.product.sku || "",
+      Category: product.product.tags[0] || "",
       Qty: product.product.qty || "",
-      Category: product.product.tags || "",
-      Price: product.product.price || "",
+      SKU: product.product.sku || "",
       sales: product.product.sales || "",
+      Price: product.product.price || "",
     });
   }, [product]);
 
@@ -42,38 +67,15 @@ function ModalProduct({ showModal, setShowModal, id }) {
     setShowModal,
   });
 
-  function handleChange(e) {
-    setFormValues((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  }
-  function handleSubmit() {
-    const formData = new FormData();
-
-    formData.append("title", formValues.Product_name);
-    formData.append("sku", formValues.SKU);
-    formData.append("price", formValues.Price);
-    formData.append("qty", formValues.Qty);
-    formData.append("tags[]", formValues.Category);
-    formData.append("sales", formValues.sales);
-
-    if (image) {
-      formData.append("image", image);
-    }
-
-    if (id) {
-      handleUpdateproducts(id, formData);
-    } else {
-      handleCreateClient(formData);
-    }
-  }
-
   return (
     <div>
       {showModal && (
-        <Modal id={id} handleSubmit={handleSubmit} setShowModal={setShowModal}>
-          <form className="space-y-4 p-6 border-t border-b border-[#E2E4E9] mb-1 ">
+        <Modal id={id} setShowModal={setShowModal}>
+          <form
+            id="form"
+            onSubmit={formik.handleSubmit}
+            className="space-y-4 p-6 border-t border-b border-[#E2E4E9] mb-1 "
+          >
             <div>
               <input
                 onChange={(e) => setImage(e.target.files[0])}
@@ -108,13 +110,19 @@ function ModalProduct({ showModal, setShowModal, id }) {
               </label>
               <Input
                 type={"text"}
-                value={formValues.Product_name}
+                onBlur={formik.handleBlur}
                 name={"Product_name"}
                 id={"Product_name"}
                 placeholder={"Product name...."}
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                onChange={handleChange}
+                className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.Product_name && formik.errors.Product_name ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                onChange={formik.handleChange}
+                value={formik.values.Product_name}
               />
+              {formik.touched.Product_name && formik.errors.Product_name && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.Product_name}
+                </p>
+              )}
             </div>
 
             <div>
@@ -126,13 +134,19 @@ function ModalProduct({ showModal, setShowModal, id }) {
               </label>
               <select
                 name="Category"
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                onChange={handleChange}
+                className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.Category && formik.errors.Category ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                onChange={formik.handleChange}
+                value={formik.values.Category}
               >
                 <option value="Sneakers">Sneakers</option>
                 <option value="Sneakers">Sneakers</option>
                 <option value="Sneakers">Sneakers</option>
               </select>
+              {formik.touched.Category && formik.errors.Category && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.Category}
+                </p>
+              )}
             </div>
             <div className="flex gap-2">
               {" "}
@@ -144,15 +158,14 @@ function ModalProduct({ showModal, setShowModal, id }) {
                   SKU
                 </label>
                 <Input
-                  type={"text"}
-                  value={formValues.SKU}
+                  type={"number"}
+                  onBlur={formik.handleBlur}
                   name={"SKU"}
                   id={"SKU"}
                   placeholder={"SKU-036"}
-                  className={
-                    "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[210px] p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                  }
-                  onChange={handleChange}
+                  className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.SKU && formik.errors.SKU ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                  onChange={formik.handleChange}
+                  value={formik.values.SKU}
                 />
               </div>
               <div>
@@ -163,15 +176,14 @@ function ModalProduct({ showModal, setShowModal, id }) {
                   Qty
                 </label>
                 <Input
-                  type={"text"}
-                  value={formValues.Qty}
+                  type={"number"}
+                  onBlur={formik.handleBlur}
                   name={"Qty"}
                   id={"Qty"}
                   placeholder={"1, 2, 3, 4"}
-                  className={
-                    "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  w-[210px] p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                  }
-                  onChange={handleChange}
+                  className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.Qty && formik.errors.Qty ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                  onChange={formik.handleChange}
+                  value={formik.values.Qty}
                 />
               </div>
             </div>
@@ -185,13 +197,14 @@ function ModalProduct({ showModal, setShowModal, id }) {
                   Price
                 </label>
                 <Input
-                  type={"text"}
-                  value={formValues.Price}
+                  type={"number"}
+                  onBlur={formik.handleBlur}
                   name={"Price"}
                   id={"Price"}
                   placeholder={"45.12"}
-                  className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[210px] p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                  onChange={handleChange}
+                  className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.Price && formik.errors.Price ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                  onChange={formik.handleChange}
+                  value={formik.values.Price}
                 />
               </div>
               <div>
@@ -202,13 +215,14 @@ function ModalProduct({ showModal, setShowModal, id }) {
                   Sales
                 </label>
                 <Input
-                  type={"text"}
-                  value={formValues.sales}
+                  type={"number"}
+                  onBlur={formik.handleBlur}
                   name={"sales"}
                   id={"sales"}
                   placeholder={"233...."}
-                  className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-[210px] p-2  focus:outline focus:outline-2 focus:outline-[#6696F5]   focus:outline focus:outline-2 focus:outline-[#6696F5]"
-                  onChange={handleChange}
+                  className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2 ${formik.touched.sales && formik.errors.sales ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-[#6696F5]"}`}
+                  onChange={formik.handleChange}
+                  value={formik.values.sales}
                 />
               </div>
             </div>

@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { Clients } from "../Api/Api";
-import { Axios } from "../Api/Axios";
-import { ReRender } from "../context/ReRender";
+import { Clients } from "../../Api/Api";
+import { Axios } from "../../Api/Axios";
+import { ReRender } from "../../context/ReRender";
 
 function useDeleteClient() {
   const time = "a" + Date.now();
@@ -11,11 +11,10 @@ function useDeleteClient() {
   function handleDelete(id) {
     Axios.delete(`${Clients}/${id}`)
       .then((res) => {
-        console.log(res);
         setisRender(time);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch(() => {
+        // log
       });
   }
 

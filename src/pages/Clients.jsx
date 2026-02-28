@@ -1,7 +1,7 @@
-import TableNavlinks from "./Components/TableNavlinks";
-import Table from "./Components/Table";
-import useClients from "./hooks/useClients";
-import useDeleteClient from "./hooks/useDeleteClient";
+import TableNavlinks from "../Components/TableNavlinks";
+import Table from "../Components/Table";
+import useClients from "../hooks/Clients/useClients";
+import useDeleteClient from "../hooks/Clients/useDeleteClient";
 
 function Clients() {
   const Client = useClients();

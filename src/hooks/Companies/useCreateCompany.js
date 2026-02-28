@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import { Companies } from "../Api/Api";
-import { Axios } from "../Api/Axios";
-import { ReRender } from "../context/ReRender";
+import { Companies } from "../../Api/Api";
+import { ReRender } from "../../context/ReRender";
+import { Axios } from "../../Api/Axios";
 
 function useCreateCompany({ setShowModal }) {
   const time = "b" + Date.now();
@@ -12,15 +12,12 @@ function useCreateCompany({ setShowModal }) {
   function handleCreatecompany(formValues) {
     setload(true);
     Axios.post(`${Companies}`, formValues)
-
       .then((res) => {
-        console.log(res);
         setShowModal(false);
         setload(false);
         setisRender(time);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         setload(false);
       });
   }

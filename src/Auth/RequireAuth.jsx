@@ -1,7 +1,7 @@
 import Cookies from "universal-cookie";
 import { Navigate, Outlet } from "react-router-dom";
-import Loading from "./Loading/Loading";
-import useUser from "./hooks/useUser";
+import Loading from "../Loading/Loading";
+import useUser from "../hooks/useUser";
 
 function RequireAuth() {
   const user = useUser();

@@ -1,21 +1,20 @@
-import { Axios } from "../Api/Axios";
+import { Axios } from "../../Api/Axios";
 import { useContext, useEffect, useState } from "react";
-import { ReRender } from "../context/ReRender";
-import { Companies } from "../Api/Api";
+import { ReRender } from "../../context/ReRender";
+import { Companies } from "../../Api/Api";
 
 function useClients() {
   const render = useContext(ReRender);
 
   const [companies, setcompanies] = useState([]);
-  console.log(companies);
 
   function getCompanies() {
     Axios.get(`${Companies}?page=1&per_page=15&search=`)
       .then((res) => {
         setcompanies(res.data);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((err) => {
+        //err
       });
   }
   useEffect(() => {

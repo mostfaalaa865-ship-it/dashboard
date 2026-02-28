@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { Axios } from "../Api/Axios";
-import { baseURL, Clients } from "../Api/Api";
-import { ReRender } from "../context/ReRender";
+import { Axios } from "../../Api/Axios";
+import { baseURL, Clients } from "../../Api/Api";
+import { ReRender } from "../../context/ReRender";
 
 function useClients() {
   const { isRender } = useContext(ReRender);
@@ -12,13 +12,13 @@ function useClients() {
         setClients(res.data);
       })
       .catch((res) => {
-        console.log(res);
+        // log errors
       });
   }
   useEffect(() => {
     getData();
   }, []);
-
+  // this useeffect is for rerender operations
   useEffect(() => {
     if (isRender.includes("a")) {
       getData();

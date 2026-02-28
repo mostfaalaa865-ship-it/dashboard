@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
-import Clients from "./Clients";
+import Clients from "./pages/Clients";
 import Login from "./Auth/Login";
 import Register from "./Auth/Register";
-import RequireAuth from "./RequireAuth";
-import Companies from "./Companies";
-import Products from "./Products";
+import RequireAuth from "./Auth/RequireAuth";
+import Companies from "./pages/Companies";
+import Products from "./pages/Products";
 function App() {
   return (
     <>

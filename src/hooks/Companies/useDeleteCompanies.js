@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { Companies } from "../Api/Api";
-import { Axios } from "../Api/Axios";
-import { ReRender } from "../context/ReRender";
+import { Companies } from "../../Api/Api";
+import { Axios } from "../../Api/Axios";
+import { ReRender } from "../../context/ReRender";
 
 function useDeleteCompanies() {
   const { setisRender } = useContext(ReRender);
@@ -11,11 +11,10 @@ function useDeleteCompanies() {
   function handleDeleteCompanies(id) {
     Axios.delete(`${Companies}/${id}`)
       .then((res) => {
-        console.log(res);
         setisRender(time);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch(() => {
+        //err
       });
   }
 
