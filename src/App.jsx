@@ -6,6 +6,8 @@ import Register from "./Auth/Register";
 import RequireAuth from "./Auth/RequireAuth";
 import Companies from "./pages/Companies";
 import Products from "./pages/Products";
+import Messages from "./pages/Messages";
+import Chat from "./Chat";
 function App() {
   return (
     <>
@@ -15,6 +17,8 @@ function App() {
             <Route path="Clients" element={<Clients />} />
             <Route path="Companies" element={<Companies />} />
             <Route path="Products" element={<Products />} />
+            <Route path="Messages" element={<Messages />} />
+            <Route path="chat/:id" element={<Chat />} />{" "}
           </Route>
         </Route>
 
