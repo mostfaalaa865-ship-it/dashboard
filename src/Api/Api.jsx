@@ -6,3 +6,5 @@ export const USER = "/auth/user";
 export const Clients = "/clients";
 export const Companies = "/companies";
 export const products = "/products";
+export const conversations = "/conversations";
+export const messages = "/messages";

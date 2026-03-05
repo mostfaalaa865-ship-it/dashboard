@@ -1,0 +1,25 @@
+import TableNavlinks from ".././Components/TableNavlinks";
+import Table from "../Components/Table";
+import useListConversation from "../hooks/Messages/useListConversation.JS";
+function Messages() {
+  const { conversation } = useListConversation();
+  const headers = [
+    { key: "customer", value: "Customer" },
+    { key: "conversation", value: "Conversation" },
+    { key: "customer_email", value: "Assigned To" },
+    { key: "number", value: "Number" },
+    { key: "waiting", value: "Waiting" },
+  ];
+  return (
+    <>
+      <TableNavlinks
+        name={"Inbox · 40"}
+        name2={"Sent · 17"}
+        name3={"Drafts · 3"}
+      />
+      <Table headers={headers} data={conversation.data} modal={"client"} />
+    </>
+  );
+}
+
+export default Messages;

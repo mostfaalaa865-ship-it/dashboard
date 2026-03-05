@@ -14,7 +14,7 @@ function useDeleteClient() {
         setisRender(time);
       })
       .catch(() => {
-        // log
+        //err
       });
   }
 

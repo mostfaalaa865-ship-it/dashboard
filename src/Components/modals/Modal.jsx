@@ -22,6 +22,8 @@ function Modal({ id, setShowModal, children }) {
     title = "create  Companies";
   } else if (path.includes("Products")) {
     title = "Add Product";
+  } else if (path.includes("Messages")) {
+    title = "Create Chat";
   }
 
   return (

@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import ModalCompanies from "../modals/ModalCompanies";
 import ModalClient from "../modals/ModalClient";
 import ModalProduct from "../modals/ModalProduct";
+import ModalMessages from "../modals/ModalMessages";
 
 function TopBar() {
   const [showModal, setShowModal] = useState(false);
@@ -23,6 +24,10 @@ function TopBar() {
     title = "Companies";
   } else if (path.includes("Products")) {
     title = "Products";
+  } else if (path.includes("Messages")) {
+    title = "Messages";
+  } else if (path.includes("xx")) {
+    title = "Re: New invoice regulation (E-Rechnung)";
   }
 
   return (
@@ -70,7 +75,7 @@ function TopBar() {
           "
             onClick={() => setShowModal(true)}
           >
-            Create {title}
+            {title === "Messages" ? "New Chat" : `Create ${title}`}{" "}
           </button>
         </div>
         <div className="flex gap-4 ">
@@ -86,6 +91,8 @@ function TopBar() {
         <ModalClient showModal={showModal} setShowModal={setShowModal} />
       ) : title == "Companies" ? (
         <ModalCompanies showModal={showModal} setShowModal={setShowModal} />
+      ) : title == "Messages" ? (
+        <ModalMessages showModal={showModal} setShowModal={setShowModal} />
       ) : (
         <ModalProduct showModal={showModal} setShowModal={setShowModal} />
       )}
