@@ -35,27 +35,33 @@ function TopBar() {
       <div
         className="
         fixed top-0 right-0
-        h-14
         bg-white
-        flex items-center justify-between
-        px-4
+        flex flex-wrap items-center justify-between
+        gap-3
+        px-4 py-2
         z-40
         w-full
         lg:left-[210px]
         lg:w-[calc(100%-210px)]
       "
       >
-        <div className="flex items-center gap-3">
-          <h1 className="text-[16px] font-medium">{title}</h1>
+        {/* title */}
+        <div className="flex items-center gap-2 min-w-0">
+          <h1 className="text-[14px] sm:text-[16px] font-medium truncate">
+            {title}
+          </h1>
+
           <img className="w-[13px] h-[6px]" src={VectorIcon} alt="" />
         </div>
 
-        <div className="flex gap-3 text-[13px]">
+        {/* buttons */}
+        <div className="flex flex-wrap items-center gap-2 text-[12px] sm:text-[13px]">
           <button
-            className="h-7 px-3 rounded-sm border border-[#E2E4E9]
-          cursor-pointer transition hover:bg-[#F3F4F6]
-          flex items-center gap-2
-        "
+            className="
+            h-7 px-3 rounded-sm border border-[#E2E4E9]
+            cursor-pointer transition hover:bg-[#F3F4F6]
+            flex items-center gap-2
+          "
           >
             Import / Export
             <img src={VectorIcon2} alt="" className="w-[9px] h-[6px]" />
@@ -63,8 +69,7 @@ function TopBar() {
 
           <button
             className="
-            h-7
-            px-4
+            h-7 px-3 sm:px-4
             cursor-pointer
             text-white
             rounded-sm
@@ -75,18 +80,31 @@ function TopBar() {
           "
             onClick={() => setShowModal(true)}
           >
-            {title === "Messages" ? "New Chat" : `Create ${title}`}{" "}
+            {title === "Messages" ? "New Chat" : `Create ${title}`}
           </button>
         </div>
-        <div className="flex gap-4 ">
+
+        {/* user */}
+        <div className="flex items-center gap-3">
           <Logout />
 
-          <div className="border-3 border-amber-300 px-2 py-1 font-semibold rounded-3xl text-white bg-black/80">
+          <div
+            className="
+            hidden sm:block
+            border-2 border-amber-300
+            px-2 py-1
+            font-semibold
+            rounded-3xl
+            text-white
+            bg-black/80
+            text-[12px]
+          "
+          >
             {userContext?.user?.name}
           </div>
         </div>
       </div>
-      {/* <Modal showModal={showModal} setShowModal={setShowModal}></Modal> */}
+
       {title == "Clients" ? (
         <ModalClient showModal={showModal} setShowModal={setShowModal} />
       ) : title == "Companies" ? (

@@ -7,7 +7,7 @@ import menu from "../../assets/Icons/menu.svg";
 
 function SideBar() {
   return (
-    <div className="sidebar  sticky  w-52.5 p-2 z-50 flex flex-col h-full top-0  bg-[#F3F4F6]">
+    <div className="sidebar  hidden lg:block md:block sticky  w-52.5 p-2 z-50 flex flex-col h-full top-0  bg-[#F3F4F6]">
       <div className="sidebar-title flex items-center gap-1 w-45 h-9 mb-4">
         <div className="name w-38 p-2 flex items-center gap-2 cursor-pointer hover:bg-[#E2E4E9] rounded-md">
           <img src={logo} className="w-5 h-5" alt="" />

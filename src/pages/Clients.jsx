@@ -2,9 +2,10 @@ import TableNavlinks from "../Components/TableNavlinks";
 import Table from "../Components/Table";
 import useClients from "../hooks/Clients/useClients";
 import useDeleteClient from "../hooks/Clients/useDeleteClient";
+import TableSkeleton from "../TableSkeleton";
 
 function Clients() {
-  const Client = useClients();
+  const Clients = useClients();
   const { handleDelete } = useDeleteClient();
 
   const headers = [
@@ -24,12 +25,16 @@ function Clients() {
         name3={"Partners · 17"}
         name4={"Blocked · 3"}
       />
-      <Table
-        data={Client.clients.data}
-        headers={headers}
-        Delete={handleDelete}
-        modal={"client"}
-      />
+      {Clients.clients.data ? (
+        <Table
+          data={Clients.clients.data}
+          headers={headers}
+          Delete={handleDelete}
+          modal={"client"}
+        />
+      ) : (
+        <TableSkeleton rows={4} cols={headers.length} />
+      )}
     </div>
   );
 }

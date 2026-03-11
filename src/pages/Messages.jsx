@@ -1,6 +1,7 @@
 import TableNavlinks from ".././Components/TableNavlinks";
 import Table from "../Components/Table";
 import useListConversation from "../hooks/Messages/useListConversation.JS";
+import TableSkeleton from "../TableSkeleton";
 function Messages() {
   const { conversation } = useListConversation();
   const headers = [
@@ -17,7 +18,16 @@ function Messages() {
         name2={"Sent · 17"}
         name3={"Drafts · 3"}
       />
-      <Table headers={headers} data={conversation.data} modal={"client"} />
+      {conversation.data ? (
+        <Table
+          headers={headers}
+          data={conversation.data}
+          modal={"client"}
+          action={false}
+        />
+      ) : (
+        <TableSkeleton rows={6} cols={headers.length} />
+      )}
     </>
   );
 }

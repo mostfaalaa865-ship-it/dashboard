@@ -27,7 +27,7 @@ function ModalMessages({ showModal, setShowModal, id }) {
   return (
     <div>
       {showModal && (
-        <Modal id={id} setShowModal={setShowModal}>
+        <Modal id={id} setShowModal={setShowModal} disable={!client_id}>
           <form
             onSubmit={handlechat}
             id="form"
@@ -38,7 +38,9 @@ function ModalMessages({ showModal, setShowModal, id }) {
             </label>
             <select
               value={client_id}
-              onChange={(e) => setclient_id(e.target.value)}
+              onChange={(e) => {
+                setclient_id(e.target.value);
+              }}
               id="client"
               className={`border text-gray-900 text-sm rounded-lg block w-full p-2 focus:outline-none focus:ring-2  mt-2`}
             >

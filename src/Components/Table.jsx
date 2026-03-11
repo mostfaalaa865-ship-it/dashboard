@@ -3,8 +3,9 @@ import ModalClient from "./modals/ModalClient";
 import menu from "../assets/menu/menu2.svg";
 import ModalCompanies from "./modals/ModalCompanies";
 import ModalProduct from "./modals/ModalProduct";
-
-function Table({ data, headers, Delete, modal }) {
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+function Table({ data, headers, Delete, modal, action = true }) {
   const [showModal, setShowModal] = useState(false);
   const [currentClient, setCurrentClient] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -44,44 +45,50 @@ function Table({ data, headers, Delete, modal }) {
                   </td>
                 ))}
 
-                <td
-                  className="px-4 py-2 relative"
-                  onClick={() =>
-                    setOpenMenuId(openMenuId === item.id ? null : item.id)
-                  }
-                >
-                  <button
-                    className="text-heading bg-neutral-primary box-border border border-transparent hover:bg-neutral-secondary-medium f"
-                    type="button"
+                {action ? (
+                  <td
+                    className="px-4 py-2 relative"
+                    onClick={() =>
+                      setOpenMenuId(openMenuId === item.id ? null : item.id)
+                    }
                   >
-                    <img src={menu} />
-                  </button>
+                    <button
+                      className="text-heading bg-neutral-primary box-border border border-transparent hover:bg-neutral-secondary-medium f"
+                      type="button"
+                    >
+                      <img src={menu} />
+                    </button>
 
-                  {openMenuId === item.id && (
-                    <div className="absolute right-2 top-0  mt-1 w-22  bg-white border rounded shadow z-50 flex items-center justify-center">
-                      <button
-                        onClick={() => {
-                          setCurrentClient(item.id);
-                          setShowModal(true);
-                          setOpenMenuId(null);
-                        }}
-                        className="block w-full text-left px-2 py-2 hover:bg-gray-100"
-                      >
-                        ✏️
-                      </button>
+                    {openMenuId === item.id && (
+                      <div className="absolute right-2 top-0  mt-1 w-22  bg-white border rounded shadow z-50 flex items-center justify-center">
+                        <button
+                          onClick={() => {
+                            setCurrentClient(item.id);
+                            setShowModal(true);
+                            setOpenMenuId(null);
+                          }}
+                          className="block w-full text-left px-2 py-2 hover:bg-gray-100"
+                        >
+                          ✏️
+                        </button>
 
-                      <button
-                        onClick={() => {
-                          Delete(item.id);
-                          setOpenMenuId(null);
-                        }}
-                        className="block w-full text-left px-2 py-2 text-red-600 hover:bg-gray-100"
-                      >
-                        🗑
-                      </button>
-                    </div>
-                  )}
-                </td>
+                        <button
+                          onClick={() => {
+                            Delete(item.id);
+                            setOpenMenuId(null);
+                          }}
+                          className="block w-full text-left  px-2 py-2 text-red-600 hover:bg-gray-100"
+                        >
+                          🗑
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                ) : (
+                  <td className="cursor-pointer">
+                    <FontAwesomeIcon icon={faEye} />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

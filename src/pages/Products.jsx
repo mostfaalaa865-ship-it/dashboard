@@ -3,6 +3,7 @@ import Table from "../Components/Table";
 import TableNavlinks from "../Components/TableNavlinks";
 import useProducts from "../hooks/Products/useProducts";
 import useDeleteProduct from "../hooks/Products/useDeleteProduct";
+import TableSkeleton from "../TableSkeleton";
 
 function Products() {
   const { products2 } = useProducts();
@@ -23,12 +24,16 @@ function Products() {
         name3={"Coupons"}
         name4={"Tax rates"}
       />
-      <Table
-        headers={headers}
-        data={products2}
-        Delete={handleDelete}
-        modal={"products"}
-      />
+      {products2 ? (
+        <Table
+          headers={headers}
+          data={products2}
+          Delete={handleDelete}
+          modal={"products"}
+        />
+      ) : (
+        <TableSkeleton rows={4} cols={5} />
+      )}
     </div>
   );
 }

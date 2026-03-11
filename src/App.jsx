@@ -13,6 +13,7 @@ function App() {
     <>
       <Routes>
         <Route element={<RequireAuth />}>
+          <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="Clients" element={<Clients />} />
             <Route path="Companies" element={<Companies />} />

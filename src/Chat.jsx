@@ -12,7 +12,8 @@ function Chat() {
   const [messageText, setMessageText] = useState("");
   const sendMessage = useSendMessage();
   const { ReadMessages } = useReadasMark();
-  const getMessages = useGetMessages(id);
+  const { getMessages, setGetMessages } = useGetMessages(id);
+  console.log(setGetMessages);
 
   useEffect(() => {
     ReadMessages(id);
@@ -20,10 +21,21 @@ function Chat() {
 
   function handlesendMessage() {
     sendMessage(messageText, id);
-    setMessageText(""); // ينضف input بعد الإرسال
+    setMessageText("");
+    setGetMessages((prev) => [
+      ...prev,
+      {
+        id: null,
+        conversation_id: id,
+        sender: "user",
+        body: messageText,
+        read_at: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ]);
   }
 
-  // تحقق لو الرسالة يوم جديد
   const isNewDay = (current, previous) => {
     if (!previous) return true;
     const currDate = new Date(current.created_at).toDateString();
@@ -45,7 +57,6 @@ function Chat() {
 
   return (
     <div className="p-3">
-      {/* Messages Container */}
       <div className="p-3 mb-4 w-[700px] max-h-[500px] overflow-auto">
         {getMessages.length === 0 && (
           <p className="text-center text-purple-900">لا يوجد رسائل</p>
@@ -55,7 +66,6 @@ function Chat() {
           const showDate = isNewDay(mes, getMessages[index - 1]);
           return (
             <div key={mes.id}>
-              {/* Date Separator */}
               {showDate && (
                 <div className="text-center my-3">
                   <span className="text-xs bg-gray-200 px-3 py-1 rounded-full text-gray-600">
@@ -64,7 +74,6 @@ function Chat() {
                 </div>
               )}
 
-              {/* Message Bubble */}
               <div
                 className={`p-3 m-4 rounded-3xl max-w-[70%] ${
                   mes.sender === "user"
