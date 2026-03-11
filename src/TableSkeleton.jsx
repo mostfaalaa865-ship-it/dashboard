@@ -1,15 +1,13 @@
 function TableSkeleton({ rows, cols }) {
-  return (
-    <div className="animate-pulse">
-      {Array.from({ length: rows }).map((_, rowIndex) => (
-        <div key={rowIndex} className={`grid grid-cols-${cols} gap-3 p-4`}>
-          {Array.from({ length: cols }).map((_, colIndex) => (
-            <div key={colIndex} className="h-4 bg-gray-200 rounded"></div>
-          ))}
-        </div>
+  return Array.from({ length: rows }).map((_, rowIndex) => (
+    <tr key={rowIndex} className="animate-pulse">
+      {Array.from({ length: cols }).map((_, colIndex) => (
+        <td key={colIndex} className="px-4 py-3">
+          <div className="h-4 w-full bg-gray-200 rounded"></div>
+        </td>
       ))}
-    </div>
-  );
+    </tr>
+  ));
 }
 
 export default TableSkeleton;
