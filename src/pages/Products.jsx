@@ -24,16 +24,13 @@ function Products() {
         name3={"Coupons"}
         name4={"Tax rates"}
       />
-      {products2 ? (
-        <Table
-          headers={headers}
-          data={products2}
-          Delete={handleDelete}
-          modal={"products"}
-        />
-      ) : (
-        <TableSkeleton rows={4} cols={5} />
-      )}
+
+      <Table
+        headers={headers}
+        data={products2}
+        Delete={handleDelete}
+        modal={"products"}
+      />
     </div>
   );
 }

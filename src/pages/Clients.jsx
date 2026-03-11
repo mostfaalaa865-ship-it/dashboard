@@ -25,16 +25,15 @@ function Clients() {
         name3={"Partners · 17"}
         name4={"Blocked · 3"}
       />
-      {Clients.clients.data ? (
-        <Table
-          data={Clients.clients.data}
-          headers={headers}
-          Delete={handleDelete}
-          modal={"client"}
-        />
-      ) : (
-        <TableSkeleton rows={4} cols={headers.length} />
-      )}
+
+      <Table
+        data={Clients.clients.data}
+        headers={headers}
+        Delete={handleDelete}
+        modal={"client"}
+      />
+
+      <TableSkeleton rows={4} cols={6} />
     </div>
   );
 }

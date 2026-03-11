@@ -26,17 +26,14 @@ function Companies() {
         name3={"North Europe · 17"}
         name4={"Africa · 3"}
       />
-      {companies.data ? (
-        <Table
-          data={companies.data}
-          headers={headers}
-          name={"companies"}
-          Delete={handleDeleteCompanies}
-          modal={"companies"}
-        />
-      ) : (
-        <TableSkeleton rows={6} cols={headers.length} />
-      )}
+
+      <Table
+        data={companies.data}
+        headers={headers}
+        name={"companies"}
+        Delete={handleDeleteCompanies}
+        modal={"companies"}
+      />
     </div>
   );
 }

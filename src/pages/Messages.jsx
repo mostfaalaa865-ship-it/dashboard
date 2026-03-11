@@ -18,16 +18,13 @@ function Messages() {
         name2={"Sent · 17"}
         name3={"Drafts · 3"}
       />
-      {conversation.data ? (
-        <Table
-          headers={headers}
-          data={conversation.data}
-          modal={"client"}
-          action={false}
-        />
-      ) : (
-        <TableSkeleton rows={6} cols={headers.length} />
-      )}
+
+      <Table
+        headers={headers}
+        data={conversation.data}
+        modal={"client"}
+        action={false}
+      />
     </>
   );
 }
