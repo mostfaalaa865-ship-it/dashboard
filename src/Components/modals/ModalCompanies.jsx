@@ -84,7 +84,11 @@ function ModalCompanies({ showModal, setShowModal, id }) {
   return (
     <div>
       {showModal && (
-        <Modal id={id} setShowModal={setShowModal}>
+        <Modal
+          id={id}
+          setShowModal={setShowModal}
+          disable={!(formik.isValid && formik.dirty)}
+        >
           <form
             id="form"
             onSubmit={formik.handleSubmit}

@@ -2,6 +2,7 @@ import Table from "../Components/Table";
 import TableNavlinks from "../Components/TableNavlinks";
 import useCompanieS from "../hooks/Companies/useCompanies";
 import useDeleteCompanies from "../hooks/Companies/useDeleteCompanies";
+import TableSkeleton from "../TableSkeleton";
 
 function Companies() {
   const { handleDeleteCompanies } = useDeleteCompanies();
@@ -25,13 +26,17 @@ function Companies() {
         name3={"North Europe · 17"}
         name4={"Africa · 3"}
       />
-      <Table
-        data={companies.data}
-        headers={headers}
-        name={"companies"}
-        Delete={handleDeleteCompanies}
-        modal={"companies"}
-      />
+      {companies.data ? (
+        <Table
+          data={companies.data}
+          headers={headers}
+          name={"companies"}
+          Delete={handleDeleteCompanies}
+          modal={"companies"}
+        />
+      ) : (
+        <TableSkeleton rows={6} cols={headers.length} />
+      )}
     </div>
   );
 }

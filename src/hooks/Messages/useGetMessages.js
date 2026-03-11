@@ -15,7 +15,7 @@ function useGetMessages(id) {
       });
   }, [id]);
 
-  return getMessages;
+  return { getMessages, setGetMessages };
 }
 
 export default useGetMessages;
