@@ -4,9 +4,7 @@ import { Axios } from "../../Api/Axios";
 function useReadasMark() {
   function ReadMessages(id) {
     Axios.patch(`${baseURL}${conversations}/${id}/read`)
-      .then((res) => {
-        console.log(res);
-      })
+      .then(() => {})
       .catch((err) => {
         console.log(err);
       });

@@ -1,19 +1,22 @@
 import { Axios } from "../../Api/Axios";
 import { baseURL, conversations, messages } from "../../Api/Api";
 import { useEffect, useState } from "react";
-function useGetMessages(id) {
+function useGetMessages(id, page) {
   const [getMessages, setGetMessages] = useState([]);
 
   useEffect(() => {
-    Axios.get(`${baseURL}${conversations}/${id}${messages}`)
+    Axios.get(
+      `${baseURL}${conversations}/${id}${messages}?page=${page}&per_page=10`,
+    )
       .then((res) => {
-        console.log(res);
-        setGetMessages(res.data.data);
+        const newMessages = res.data.data.reverse();
+        setGetMessages((prev) => [...newMessages, ...prev]);
+        console.log(newMessages);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [id]);
+  }, [id, page]);
 
   return { getMessages, setGetMessages };
 }

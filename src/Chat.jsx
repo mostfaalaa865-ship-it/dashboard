@@ -3,37 +3,107 @@ import useGetMessages from "./hooks/Messages/useGetMessages";
 
 import arrow from "./assets/arrow.svg";
 import email from "./assets/email.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSendMessage from "./hooks/Messages/useSendMessage";
 import useReadasMark from "./hooks/Messages/useReadasMark";
+import { Axios } from "./Api/Axios";
 
 function Chat() {
+  const [paga, setpage] = useState(1);
+
   const { id } = useParams();
   const [messageText, setMessageText] = useState("");
   const sendMessage = useSendMessage();
   const { ReadMessages } = useReadasMark();
-  const { getMessages, setGetMessages } = useGetMessages(id);
-  console.log(setGetMessages);
+  const { getMessages, setGetMessages } = useGetMessages(id, paga);
+  const chatRef = useRef();
+  console.log(getMessages);
 
   useEffect(() => {
     ReadMessages(id);
   }, [id]);
 
+  useEffect(() => {
+    if (!id) return;
+    const ws = new WebSocket("wss://mostafa.nageeb-darwish.cloud/app/469630");
+
+    const channel_name = `private-conversation.${id}`;
+    ws.onopen = () => {
+      console.log("connected");
+    };
+
+    ws.onmessage = async (event) => {
+      console.log(event.data);
+
+      try {
+        const parsed = JSON.parse(event.data);
+        if (parsed.event == "pusher:connection_established") {
+          const data = JSON.parse(parsed.data);
+          const socket_id = data.socket_id;
+
+          const AuthRes = await Axios.post(`/broadcasting/auth`, {
+            socket_id,
+            channel_name,
+          });
+          const auth = AuthRes.data.auth;
+
+          ws.send(
+            JSON.stringify({
+              event: "pusher:subscribe",
+              data: { channel: channel_name, auth },
+            }),
+          );
+        }
+
+        if (parsed.event == "MessageSent") {
+          console.log(parsed.data);
+          const message = JSON.parse(parsed.data);
+          setGetMessages((prev) => [...prev, message.message]);
+          console.log(message.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    ws.onerror = (err) => {
+      console.log(err);
+    };
+    ws.onclose = () => {
+      console.log("connection closed");
+    };
+    return () => {
+      ws.close();
+    };
+  }, [id]);
+
+  useEffect(() => {
+    if (getMessages.length < 1) return;
+
+    chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+  }, [getMessages]);
+
+  useEffect(() => {
+    const chat = chatRef.current;
+    if (!chat) return;
+
+    const handlePagination = () => {
+      if (chat.scrollTop <= 50) {
+        setpage((prev) => prev + 1);
+      }
+    };
+
+    chat.addEventListener("scroll", handlePagination);
+
+    return () => {
+      chat.removeEventListener("scroll", handlePagination);
+    };
+  }, []);
+
   function handlesendMessage() {
+    if (!messageText.trim()) return;
+
     sendMessage(messageText, id);
     setMessageText("");
-    setGetMessages((prev) => [
-      ...prev,
-      {
-        id: null,
-        conversation_id: id,
-        sender: "user",
-        body: messageText,
-        read_at: null,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-    ]);
   }
 
   const isNewDay = (current, previous) => {
@@ -57,7 +127,10 @@ function Chat() {
 
   return (
     <div className="p-3">
-      <div className="p-3 mb-4 w-[700px] max-h-[500px] overflow-auto">
+      <div
+        className="p-3 mb-4 w-[700px] max-h-[500px] overflow-auto"
+        ref={chatRef}
+      >
         {getMessages.length === 0 && (
           <p className="text-center text-purple-900">لا يوجد رسائل</p>
         )}
@@ -65,7 +138,7 @@ function Chat() {
         {getMessages.map((mes, index) => {
           const showDate = isNewDay(mes, getMessages[index - 1]);
           return (
-            <div key={mes.id}>
+            <div key={`${mes.id}-${index}`}>
               {showDate && (
                 <div className="text-center my-3">
                   <span className="text-xs bg-gray-200 px-3 py-1 rounded-full text-gray-600">
