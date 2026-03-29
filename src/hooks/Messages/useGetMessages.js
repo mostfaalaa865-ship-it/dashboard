@@ -3,8 +3,11 @@ import { baseURL, conversations, messages } from "../../Api/Api";
 import { useEffect, useState } from "react";
 function useGetMessages(id, page) {
   const [getMessages, setGetMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
+
     Axios.get(
       `${baseURL}${conversations}/${id}${messages}?page=${page}&per_page=10`,
     )
@@ -15,10 +18,13 @@ function useGetMessages(id, page) {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [id, page]);
 
-  return { getMessages, setGetMessages };
+  return { getMessages, setGetMessages, loading };
 }
 
 export default useGetMessages;

@@ -9,15 +9,17 @@ import useReadasMark from "./hooks/Messages/useReadasMark";
 import { Axios } from "./Api/Axios";
 
 function Chat() {
-  const [paga, setpage] = useState(1);
-
+  const [page, setpage] = useState(1);
   const { id } = useParams();
   const [messageText, setMessageText] = useState("");
   const sendMessage = useSendMessage();
   const { ReadMessages } = useReadasMark();
-  const { getMessages, setGetMessages } = useGetMessages(id, paga);
+  const { getMessages, setGetMessages, loading } = useGetMessages(id, page);
   const chatRef = useRef();
-  console.log(getMessages);
+  const isPageination = useRef(false);
+  const prevHeight = useRef(0);
+
+  console.log(page);
 
   useEffect(() => {
     ReadMessages(id);
@@ -79,16 +81,28 @@ function Chat() {
   useEffect(() => {
     if (getMessages.length < 1) return;
 
-    chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+    if (!isPageination.current) {
+      chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+    } else {
+      const newHeight = chatRef.current.scrollHeight;
+
+      const diff = newHeight - prevHeight.current;
+
+      chatRef.current.scrollTop = diff;
+    }
   }, [getMessages]);
 
   useEffect(() => {
     const chat = chatRef.current;
     if (!chat) return;
-
+    let isLoading = loading;
     const handlePagination = () => {
-      if (chat.scrollTop <= 50) {
+      if (chat.scrollTop <= 150 && !loading) {
+        isPageination.current = true;
+        prevHeight.current = chat.scrollHeight;
+
         setpage((prev) => prev + 1);
+        console.log(isLoading);
       }
     };
 
@@ -97,7 +111,7 @@ function Chat() {
     return () => {
       chat.removeEventListener("scroll", handlePagination);
     };
-  }, []);
+  }, [loading]);
 
   function handlesendMessage() {
     if (!messageText.trim()) return;
