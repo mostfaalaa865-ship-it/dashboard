@@ -19,8 +19,6 @@ function Chat() {
   const isPageination = useRef(false);
   const prevHeight = useRef(0);
 
-  console.log(page);
-
   useEffect(() => {
     ReadMessages(id);
   }, [id]);
