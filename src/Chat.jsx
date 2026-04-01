@@ -2,19 +2,21 @@ import { useParams } from "react-router-dom";
 import useGetMessages from "./hooks/Messages/useGetMessages";
 import arrow from "./assets/arrow.svg";
 import email from "./assets/email.svg";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSendMessage from "./hooks/Messages/useSendMessage";
 import useReadasMark from "./hooks/Messages/useReadasMark";
 import { Axios } from "./Api/Axios";
 
 function Chat() {
+  const [page, setpage] = useState(1);
   const { id } = useParams();
   const [messageText, setMessageText] = useState("");
   const sendMessage = useSendMessage();
   const { ReadMessages } = useReadasMark();
-  const [page, setpage] = useState(1);
-  const { getMessages, setGetMessages } = useGetMessages(page, id);
+  const { getMessages, setGetMessages, loading } = useGetMessages(id, page);
   const chatRef = useRef();
+  const isPageination = useRef(false);
+  const prevHeight = useRef(0);
 
   useEffect(() => {
     ReadMessages(id);
@@ -23,25 +25,25 @@ function Chat() {
   useEffect(() => {
     if (!id) return;
     const ws = new WebSocket("wss://mostafa.nageeb-darwish.cloud/app/469630");
-    const channel_name = `private-conversation.${id}`;
 
+    const channel_name = `private-conversation.${id}`;
     ws.onopen = () => {
       console.log("connected");
     };
 
     ws.onmessage = async (event) => {
+      console.log(event.data);
+
       try {
         const parsed = JSON.parse(event.data);
-
-        if (parsed.event === "pusher:connection_established") {
+        if (parsed.event == "pusher:connection_established") {
           const data = JSON.parse(parsed.data);
           const socket_id = data.socket_id;
 
-          const AuthRes = await Axios.post("/broadcasting/auth", {
+          const AuthRes = await Axios.post(`/broadcasting/auth`, {
             socket_id,
             channel_name,
           });
-
           const auth = AuthRes.data.auth;
 
           ws.send(
@@ -58,20 +60,18 @@ function Chat() {
           console.log(parsed.data);
           const message = JSON.parse(parsed.data);
           setGetMessages((prev) => [...prev, message.message]);
+          console.log(message.message);
         }
       } catch (error) {
         console.log(error);
       }
     };
-
     ws.onerror = (err) => {
       console.log(err);
     };
-
     ws.onclose = () => {
       console.log("connection closed");
     };
-
     return () => {
       ws.close();
     };
@@ -79,28 +79,42 @@ function Chat() {
 
   useEffect(() => {
     if (getMessages.length < 1) return;
-    chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+
+    if (!isPageination.current) {
+      chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+    } else {
+      const newHeight = chatRef.current.scrollHeight;
+
+      const diff = newHeight - prevHeight.current;
+
+      chatRef.current.scrollTop = diff;
+    }
   }, [getMessages]);
 
   useEffect(() => {
     const chat = chatRef.current;
     if (!chat) return;
+    let isLoading = loading;
+    const handlePagination = () => {
+      if (chat.scrollTop <= 150 && !loading) {
+        isPageination.current = true;
+        prevHeight.current = chat.scrollHeight;
 
-    const handleScroll = () => {
-      if (chat.scrollTop <= 150) {
         setpage((prev) => prev + 1);
+        console.log(isLoading);
       }
     };
 
-    chat.addEventListener("scroll", handleScroll);
+    chat.addEventListener("scroll", handlePagination);
 
     return () => {
-      chat.removeEventListener("scroll", handleScroll);
+      chat.removeEventListener("scroll", handlePagination);
     };
-  }, []);
+  }, [loading]);
 
   function handlesendMessage() {
     if (!messageText.trim()) return;
+
     sendMessage(messageText, id);
     setMessageText("");
   }
