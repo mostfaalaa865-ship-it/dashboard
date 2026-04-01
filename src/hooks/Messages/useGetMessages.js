@@ -1,7 +1,7 @@
 import { Axios } from "../../Api/Axios";
 import { baseURL, conversations, messages } from "../../Api/Api";
 import { useEffect, useState } from "react";
-function useGetMessages(id, page) {
+function useGetMessages(page, id) {
   const [getMessages, setGetMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 

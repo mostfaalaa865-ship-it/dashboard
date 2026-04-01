@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import useGetMessages from "./hooks/Messages/useGetMessages";
-
 import arrow from "./assets/arrow.svg";
 import email from "./assets/email.svg";
 import { useEffect, useRef, useState } from "react";
@@ -50,11 +49,13 @@ function Chat() {
           ws.send(
             JSON.stringify({
               event: "pusher:subscribe",
-              data: { channel: channel_name, auth },
+              data: {
+                channel: channel_name,
+                auth,
+              },
             }),
           );
         }
-
         if (parsed.event == "MessageSent") {
           console.log(parsed.data);
           const message = JSON.parse(parsed.data);
@@ -199,6 +200,7 @@ function Chat() {
           <button onClick={handlesendMessage} className="cursor-pointer">
             Send
           </button>
+
           <img className="w-4 h-4" src={arrow} alt="" />
         </div>
       </div>
