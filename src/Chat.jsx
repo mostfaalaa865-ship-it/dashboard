@@ -5,6 +5,7 @@ import email from "./assets/email.svg";
 import { useEffect, useRef, useState } from "react";
 import useSendMessage from "./hooks/Messages/useSendMessage";
 import useReadasMark from "./hooks/Messages/useReadasMark";
+import useUser from "./hooks/useUser";
 import { Axios } from "./Api/Axios";
 
 function Chat() {
@@ -13,20 +14,22 @@ function Chat() {
   const [messageText, setMessageText] = useState("");
   const sendMessage = useSendMessage();
   const { ReadMessages } = useReadasMark();
-  const { getMessages, setGetMessages, loading } = useGetMessages(id, page);
+  const { getMessages, setGetMessages, loading } = useGetMessages(page, id);
   const chatRef = useRef();
   const isPageination = useRef(false);
   const prevHeight = useRef(0);
+  const { user } = useUser();
 
   useEffect(() => {
     ReadMessages(id);
   }, [id]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!user?.id) return;
+
     const ws = new WebSocket("wss://mostafa.nageeb-darwish.cloud/app/469630");
 
-    const channel_name = `private-conversation.${id}`;
+    const channel_name = `private-user.${user.id}`;
     ws.onopen = () => {
       console.log("connected");
     };
@@ -75,7 +78,7 @@ function Chat() {
     return () => {
       ws.close();
     };
-  }, [id]);
+  }, [user]);
 
   useEffect(() => {
     if (getMessages.length < 1) return;

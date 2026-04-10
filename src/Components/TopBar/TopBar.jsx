@@ -8,13 +8,22 @@ import ModalCompanies from "../modals/ModalCompanies";
 import ModalClient from "../modals/ModalClient";
 import ModalProduct from "../modals/ModalProduct";
 import ModalMessages from "../modals/ModalMessages";
+import Notificationsicon from "../../assets/Icons/Vector-3.svg";
+import Notifications from "../../Notifications";
+import { NotificationsContext } from "../../context/numNotifications";
 
 function TopBar() {
   const [showModal, setShowModal] = useState(false);
   const userContext = useContext(User);
-
+  const [show, setshow] = useState(false);
   const location = useLocation();
   const path = location.pathname;
+  const { notifications2 } = useContext(NotificationsContext);
+  const numNotifications = notifications2.filter(
+    (n) => n.read_at === null,
+  ).length;
+  console.log(notifications2);
+  console.log(numNotifications);
 
   let title = "";
 
@@ -86,6 +95,19 @@ function TopBar() {
 
         {/* user */}
         <div className="flex items-center gap-3">
+          <div className=" relative">
+            {" "}
+            <img
+              src={Notificationsicon}
+              alt=""
+              className=" cursor-pointer w-[18px] "
+              onClick={() => setshow((prev) => !prev)}
+            />
+            <div className="absolute -top-2 -right-1 w-4 h-4 flex items-center justify-center rounded-full bg-[#6696F5] text-white text-[10px]">
+              {numNotifications}
+            </div>
+            {show && <Notifications />}
+          </div>
           <Logout />
 
           <div
@@ -119,3 +141,4 @@ function TopBar() {
 }
 
 export default TopBar;
+/////
