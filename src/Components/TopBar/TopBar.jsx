@@ -22,8 +22,6 @@ function TopBar() {
   const numNotifications = notifications2.filter(
     (n) => n.read_at === null,
   ).length;
-  console.log(notifications2);
-  console.log(numNotifications);
 
   let title = "";
 

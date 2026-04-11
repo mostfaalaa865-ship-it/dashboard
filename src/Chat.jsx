@@ -5,7 +5,7 @@ import email from "./assets/email.svg";
 import { useEffect, useRef, useState } from "react";
 import useSendMessage from "./hooks/Messages/useSendMessage";
 import useReadasMark from "./hooks/Messages/useReadasMark";
-import useUser from "./hooks/useUser";
+// import useUser from "./hooks/useUser";
 import { Axios } from "./Api/Axios";
 
 function Chat() {
@@ -18,67 +18,67 @@ function Chat() {
   const chatRef = useRef();
   const isPageination = useRef(false);
   const prevHeight = useRef(0);
-  const { user } = useUser();
+  // const { user } = useUser();
 
   useEffect(() => {
     ReadMessages(id);
   }, [id]);
 
-  useEffect(() => {
-    if (!user?.id) return;
+  // useEffect(() => {
+  //   if (!user?.id) return;
 
-    const ws = new WebSocket("wss://mostafa.nageeb-darwish.cloud/app/469630");
+  //   const ws = new WebSocket("wss://mostafa.nageeb-darwish.cloud/app/469630");
 
-    const channel_name = `private-user.${user.id}`;
-    ws.onopen = () => {
-      console.log("connected");
-    };
+  //   const channel_name = `private-user.${user.id}`;
+  //   ws.onopen = () => {
+  //     console.log("connected");
+  //   };
 
-    ws.onmessage = async (event) => {
-      console.log(event.data);
+  //   ws.onmessage = async (event) => {
+  //     console.log(event.data);
 
-      try {
-        const parsed = JSON.parse(event.data);
-        if (parsed.event == "pusher:connection_established") {
-          const data = JSON.parse(parsed.data);
-          const socket_id = data.socket_id;
+  //     try {
+  //       const parsed = JSON.parse(event.data);
+  //       if (parsed.event == "pusher:connection_established") {
+  //         const data = JSON.parse(parsed.data);
+  //         const socket_id = data.socket_id;
 
-          const AuthRes = await Axios.post(`/broadcasting/auth`, {
-            socket_id,
-            channel_name,
-          });
-          const auth = AuthRes.data.auth;
+  //         const AuthRes = await Axios.post(`/broadcasting/auth`, {
+  //           socket_id,
+  //           channel_name,
+  //         });
+  //         const auth = AuthRes.data.auth;
 
-          ws.send(
-            JSON.stringify({
-              event: "pusher:subscribe",
-              data: {
-                channel: channel_name,
-                auth,
-              },
-            }),
-          );
-        }
-        if (parsed.event == "MessageSent") {
-          console.log(parsed.data);
-          const message = JSON.parse(parsed.data);
-          setGetMessages((prev) => [...prev, message.message]);
-          console.log(message.message);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    ws.onerror = (err) => {
-      console.log(err);
-    };
-    ws.onclose = () => {
-      console.log("connection closed");
-    };
-    return () => {
-      ws.close();
-    };
-  }, [user]);
+  //         ws.send(
+  //           JSON.stringify({
+  //             event: "pusher:subscribe",
+  //             data: {
+  //               channel: channel_name,
+  //               auth,
+  //             },
+  //           }),
+  //         );
+  //       }
+  //       if (parsed.event == "MessageSent") {
+  //         console.log(parsed.data);
+  //         const message = JSON.parse(parsed.data);
+  //         setGetMessages((prev) => [...prev, message.message]);
+  //         console.log(message.message);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   ws.onerror = (err) => {
+  //     console.log(err);
+  //   };
+  //   ws.onclose = () => {
+  //     console.log("connection closed");
+  //   };
+  //   return () => {
+  //     ws.close();
+  //   };
+  // }, [user]);
 
   useEffect(() => {
     if (getMessages.length < 1) return;
