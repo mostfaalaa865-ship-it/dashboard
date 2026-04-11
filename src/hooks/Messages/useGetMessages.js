@@ -5,6 +5,8 @@ function useGetMessages(page, id) {
   const [getMessages, setGetMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  console.log(getMessages);
+
   useEffect(() => {
     setLoading(true);
 

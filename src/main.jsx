@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { NotificationsProvider } from "./context/numNotifications";
+import { MessageContextProvider } from "./context/messagesContext";
 
 import { createRoot } from "react-dom/client";
 import "./index.css";
@@ -13,9 +14,11 @@ createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <GetUser>
       <Render>
-        <NotificationsProvider>
-          <App />
-        </NotificationsProvider>
+        <MessageContextProvider>
+          <NotificationsProvider>
+            <App />
+          </NotificationsProvider>
+        </MessageContextProvider>
       </Render>
     </GetUser>
   </BrowserRouter>,

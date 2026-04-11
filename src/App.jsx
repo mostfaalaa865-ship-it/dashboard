@@ -8,7 +8,74 @@ import Companies from "./pages/Companies";
 import Products from "./pages/Products";
 import Messages from "./pages/Messages";
 import Chat from "./Chat";
+import { useContext, useEffect } from "react";
+import { Axios } from "./Api/Axios";
+import useUser from "./hooks/useUser";
+import { NotificationsContext } from "./context/numNotifications";
+import { MessageContext } from "./context/messagesContext";
+
+// import useGetMessages from "./hooks/Messages/useGetMessages";
+
 function App() {
+  // const { setGetMessages } = useGetMessages();
+
+  const { user } = useUser();
+  const { setnotifications2 } = useContext(NotificationsContext);
+  const setGetMessages = useContext(MessageContext);
+  console.log(setGetMessages);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    const ws = new WebSocket("wss://mostafa.nageeb-darwish.cloud/app/469630");
+    const channel_name = `private-user.${user.id}`;
+
+    ws.onopen = () => {
+      console.log("connected");
+    };
+
+    ws.onmessage = async (event) => {
+      try {
+        const parsed = JSON.parse(event.data);
+        if (parsed.event == "pusher:connection_established") {
+          const data = JSON.parse(parsed.data);
+          const socket_id = data.socket_id;
+
+          const AuthRes = await Axios.post(`/broadcasting/auth`, {
+            socket_id,
+            channel_name,
+          });
+          const auth = AuthRes.data.auth;
+
+          ws.send(
+            JSON.stringify({
+              event: "pusher:subscribe",
+              data: {
+                channel: channel_name,
+                auth: auth,
+              },
+            }),
+          );
+        }
+        if (parsed.event == "notification.created") {
+          const notification = JSON.parse(parsed.data);
+
+          setnotifications2((prev) => [...prev, notification]);
+        } else if (parsed.event == "MessageSent") {
+          console.log(parsed.data);
+          const message = JSON.parse(parsed.data);
+          setGetMessages((prev) => [...prev, message.message]);
+          console.log(message.message);
+        }
+        console.log(parsed);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return () => {
+      ws.close();
+    };
+  }, [user?.id]);
+
   return (
     <>
       <Routes>
