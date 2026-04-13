@@ -14,7 +14,7 @@ function Chat() {
   const [messageText, setMessageText] = useState("");
   const sendMessage = useSendMessage();
   const { ReadMessages } = useReadasMark();
-  const { getMessages, setGetMessages, loading } = useGetMessages(page, id);
+  const { GetMessages, setGetMessages, loading } = useGetMessages(page, id);
   const chatRef = useRef();
   const isPageination = useRef(false);
   const prevHeight = useRef(0);
@@ -81,7 +81,7 @@ function Chat() {
   // }, [user]);
 
   useEffect(() => {
-    if (getMessages.length < 1) return;
+    if (GetMessages?.length < 1) return;
 
     if (!isPageination.current) {
       chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
@@ -92,7 +92,7 @@ function Chat() {
 
       chatRef.current.scrollTop = diff;
     }
-  }, [getMessages]);
+  }, [GetMessages]);
 
   useEffect(() => {
     const chat = chatRef.current;
@@ -147,12 +147,12 @@ function Chat() {
         className="p-3 mb-4 w-[700px] max-h-[500px] overflow-auto"
         ref={chatRef}
       >
-        {getMessages.length === 0 && (
+        {GetMessages?.length === 0 && (
           <p className="text-center text-purple-900">لا يوجد رسائل</p>
         )}
 
-        {getMessages.map((mes, index) => {
-          const showDate = isNewDay(mes, getMessages[index - 1]);
+        {GetMessages?.map((mes, index) => {
+          const showDate = isNewDay(mes, GetMessages[index - 1]);
           return (
             <div key={`${mes.id}-${index}`}>
               {showDate && (
