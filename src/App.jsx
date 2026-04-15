@@ -15,11 +15,7 @@ import { NotificationsContext } from "./context/numNotifications";
 import { MessageContext } from "./context/messagesContext";
 import showDesktopNotification from "./helper/showDesktopNotification"
 
-// import useGetMessages from "./hooks/Messages/useGetMessages";
-
 function App() {
-  // const { setGetMessages } = useGetMessages();
-
   const { user } = useUser();
   const { setnotifications2 } = useContext(NotificationsContext);
   const { setGetMessages } = useContext(MessageContext);
@@ -27,6 +23,7 @@ function App() {
   useEffect(() => {
     if ("Notification" in window) {
       Notification.requestPermission();
+      console.log("hello");
     }
   }, []);
 
