@@ -21,7 +21,7 @@ function App() {
 
   const { user } = useUser();
   const { setnotifications2 } = useContext(NotificationsContext);
-  const setGetMessages = useContext(MessageContext);
+  const { setGetMessages } = useContext(MessageContext);
   console.log(setGetMessages);
 
   useEffect(() => {

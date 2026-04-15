@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
 
-export const MessageContext = createContext("222");
+export const MessageContext = createContext({});
 export function MessageContextProvider({ children }) {
   const [GetMessages, setGetMessages] = useState([]);
   return (
