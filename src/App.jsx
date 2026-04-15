@@ -13,6 +13,7 @@ import { Axios } from "./Api/Axios";
 import useUser from "./hooks/useUser";
 import { NotificationsContext } from "./context/numNotifications";
 import { MessageContext } from "./context/messagesContext";
+import showDesktopNotification from "./helper/showDesktopNotification"
 
 // import useGetMessages from "./hooks/Messages/useGetMessages";
 
@@ -22,6 +23,12 @@ function App() {
   const { user } = useUser();
   const { setnotifications2 } = useContext(NotificationsContext);
   const { setGetMessages } = useContext(MessageContext);
+
+  useEffect(() => {
+    if ("Notification" in window) {
+      Notification.requestPermission();
+    }
+  }, []);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -59,6 +66,10 @@ function App() {
           const notification = JSON.parse(parsed.data);
 
           setnotifications2((prev) => [...prev, notification]);
+          showDesktopNotification(
+            "New Notification",
+            notification.data.body
+          );
         } else if (parsed.event == "MessageSent") {
           console.log(parsed.data);
           const message = JSON.parse(parsed.data);
