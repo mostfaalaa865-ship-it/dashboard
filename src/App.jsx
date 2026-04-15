@@ -22,7 +22,6 @@ function App() {
   const { user } = useUser();
   const { setnotifications2 } = useContext(NotificationsContext);
   const { setGetMessages } = useContext(MessageContext);
-  console.log(setGetMessages);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -64,7 +63,6 @@ function App() {
           console.log(parsed.data);
           const message = JSON.parse(parsed.data);
           setGetMessages((prev) => [...prev, message.message]);
-          console.log(message.message);
         }
         console.log(parsed);
       } catch (error) {

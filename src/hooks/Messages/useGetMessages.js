@@ -1,11 +1,11 @@
 import { Axios } from "../../Api/Axios";
 import { baseURL, conversations, messages } from "../../Api/Api";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { MessageContext } from "../../context/messagesContext";
 function useGetMessages(page, id) {
-  const [getMessages, setGetMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log(getMessages);
+  const { GetMessages, setGetMessages } = useContext(MessageContext);
 
   useEffect(() => {
     setLoading(true);
@@ -16,7 +16,6 @@ function useGetMessages(page, id) {
       .then((res) => {
         const newMessages = res.data.data.reverse();
         setGetMessages((prev) => [...newMessages, ...prev]);
-        console.log(newMessages);
       })
       .catch((err) => {
         console.log(err);
@@ -26,7 +25,7 @@ function useGetMessages(page, id) {
       });
   }, [id, page]);
 
-  return { getMessages, setGetMessages, loading };
+  return { GetMessages, setGetMessages, loading };
 }
 
 export default useGetMessages;

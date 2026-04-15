@@ -104,7 +104,7 @@ function TopBar() {
             <div className="absolute -top-2 -right-1 w-4 h-4 flex items-center justify-center rounded-full bg-[#6696F5] text-white text-[10px]">
               {numNotifications}
             </div>
-            {show && <Notifications />}
+            {show && <Notifications setshow={setshow} />}
           </div>
           <Logout />
 
