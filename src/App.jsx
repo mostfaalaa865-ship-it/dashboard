@@ -14,14 +14,17 @@ import useUser from "./hooks/useUser";
 import { NotificationsContext } from "./context/numNotifications";
 import { MessageContext } from "./context/messagesContext";
 
-// import useGetMessages from "./hooks/Messages/useGetMessages";
-
 function App() {
-  // const { setGetMessages } = useGetMessages();
-
   const { user } = useUser();
   const { setnotifications2 } = useContext(NotificationsContext);
   const { setGetMessages } = useContext(MessageContext);
+
+  useEffect(() => {
+    if ("Notification" in window) {
+      Notification.requestPermission();
+      console.log("hello");
+    }
+  }, []);
 
   useEffect(() => {
     if (!user?.id) return;
