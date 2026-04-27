@@ -9,8 +9,7 @@ function useReadAll() {
 
   function handleReadAll() {
     Axios.post(`${notifications}/read-all`)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         const updated = notifications2.map((n) => ({
           ...n,
           read_at: new Date().toISOString(),
