@@ -11,6 +11,7 @@ function Notifications({ setshow }) {
   const { handleReadAll } = useReadAll();
   const { handleRead } = useRead();
   const containerRef = useRef();
+  console.log(notifications2);
 
   function timeAgo(dateString) {
     const date = new Date(dateString);

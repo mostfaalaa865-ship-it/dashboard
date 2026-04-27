@@ -1,11 +1,14 @@
 import { Axios } from "../../Api/Axios";
-import { baseURL, conversations, messages } from "../../Api/Api";
+import { conversations, messages } from "../../Api/Api";
 
 function useSendMessage() {
-  function SendMessage(message, id) {
-    Axios.post(`${baseURL}${conversations}/${id}${messages}`, {
-      body: message,
-    })
+  function SendMessage(message, id, image) {
+    const formDataMessage = new FormData();
+    for (let i = 0; i < image.length; i++) {
+      formDataMessage.append(`attachments[${i}]`, image[i]);
+    }
+    formDataMessage.append("body", message);
+    Axios.post(`${conversations}/${id}${messages}`, formDataMessage)
       .then((res) => {
         console.log(res);
       })
