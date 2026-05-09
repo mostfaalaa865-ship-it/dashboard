@@ -10,6 +10,7 @@ import { Axios } from "./Api/Axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { Document, Page } from "react-pdf";
+import { object } from "zod";
 
 function Chat() {
   const [page, setpage] = useState(1);
@@ -30,61 +31,6 @@ function Chat() {
   useEffect(() => {
     ReadMessages(id);
   }, [id]);
-
-  //   if (!user?.id) return;
-
-  //   const ws = new WebSocket("wss://mostafa.nageeb-darwish.cloud/app/469630");
-
-  //   const channel_name = `private-user.${user.id}`;
-  //   ws.onopen = () => {
-  //     console.log("connected");
-  //   };
-
-  //   ws.onmessage = async (event) => {
-  //     console.log(event.data);
-
-  //     try {
-  //       const parsed = JSON.parse(event.data);
-  //       if (parsed.event == "pusher:connection_established") {
-  //         const data = JSON.parse(parsed.data);
-  //         const socket_id = data.socket_id;
-
-  //         const AuthRes = await Axios.post(`/broadcasting/auth`, {
-  //           socket_id,
-  //           channel_name,
-  //         });
-  //         const auth = AuthRes.data.auth;
-
-  //         ws.send(
-  //           JSON.stringify({
-  //             event: "pusher:subscribe",
-  //             data: {
-  //               channel: channel_name,
-  //               auth,
-  //             },
-  //           }),
-  //         );
-  //       }
-  //       if (parsed.event == "MessageSent") {
-  //         console.log(parsed.data);
-  //         const message = JSON.parse(parsed.data);
-  //         setGetMessages((prev) => [...prev, message.message]);
-  //         console.log(message.message);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   ws.onerror = (err) => {
-  //     console.log(err);
-  //   };
-  //   ws.onclose = () => {
-  //     console.log("connection closed");
-  //   };
-  //   return () => {
-  //     ws.close();
-  //   };
-  // }, [user]);
 
   function handleImage(url) {
     seturlImage(url);
@@ -134,7 +80,7 @@ function Chat() {
       body: messageText,
       sender: "user",
       created_at: new Date().toISOString(),
-      attachments: [],
+      attachments: image,
       read_at: null,
     };
 
@@ -164,32 +110,36 @@ function Chat() {
       minute: "2-digit",
     });
   };
+  console.log(GetMessages);
 
   return (
     <>
       {show && (
         <>
-          <span
-            className=" absolute top-15 right-4 text-white z-40 cursor-pointer"
-            onClick={() => {
-              setshow(false);
-            }}
-          >
-            x
-          </span>
-          <div className="fixed w-full h-full bg-black opacity-80  z-30"></div>
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black/70"
+              onClick={() => setshow(false)}
+            />
+
+            <div className="relative w-[90%] md:w-[70%] h-[90%]   overflow-hidden">
+              <button
+                onClick={() => setshow(false)}
+                className="absolute top-2 right-2 z-10 bg-red-500 text-white px-2 py-1 rounded cursor-pointer"
+              >
+                ✕
+              </button>
+
+              <img
+                src={urlImage}
+                className="w-full h-full object-contain z-52"
+                alt=""
+              />
+            </div>
+          </div>
         </>
       )}
       <div className="p-3">
-        {show && (
-          <div className="fixed z-50 w-3/4 top-1/2 left-1/2  h-3/4  transform -translate-x-1/2 -translate-y-1/2 ">
-            <img
-              src={urlImage}
-              className="w-full h-full object-contain"
-              alt=""
-            />
-          </div>
-        )}
         <div
           className="p-3 mb-4 w-[700px] max-h-[500px] overflow-auto"
           ref={chatRef}
@@ -197,7 +147,6 @@ function Chat() {
           {GetMessages?.length === 0 && (
             <p className="text-center text-purple-900">لا يوجد رسائل</p>
           )}
-
           {GetMessages?.map((mes, index) => {
             const showDate = isNewDay(mes, GetMessages[index - 1]);
             return (
@@ -220,17 +169,32 @@ function Chat() {
                   {mes.attachments.map((item, i) => {
                     const fileUrl = `https://mostafa.nageeb-darwish.cloud/storage/${item.path}`;
 
-                    return item.path.includes("pdf") ? (
+                    return item.mime_type === "application/pdf" ||
+                      item.type === "application/pdf" ? (
                       <p
                         key={i}
                         className="text-blue-600 cursor-pointer"
-                        onClick={() => setPdfUrl(fileUrl)}
+                        onClick={() =>
+                          setPdfUrl(
+                            item.path ? fileUrl : URL.createObjectURL(item),
+                          )
+                        }
                       >
                         📄 Open PDF
                       </p>
                     ) : (
-                      <span key={i} onClick={() => handleImage(fileUrl)}>
-                        <img src={fileUrl} alt="" />
+                      <span
+                        key={i}
+                        onClick={() =>
+                          handleImage(
+                            item.path ? fileUrl : URL.createObjectURL(item),
+                          )
+                        }
+                      >
+                        <img
+                          src={item.path ? fileUrl : URL.createObjectURL(item)}
+                          alt=""
+                        />
                       </span>
                     );
                   })}
@@ -296,30 +260,33 @@ function Chat() {
 
             <img className="w-4 h-4" src={arrow} alt="" />
           </div>
-          {pdfUrl && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
-              <div
-                className="absolute inset-0 bg-black/70"
+
+          <div
+            className={`fixed inset-0  flex items-center justify-center ${pdfUrl ? "z-50 " : " invisible z-0"} `}
+          >
+            <div
+              className={`absolute inset-0 bg-black/70 transition-all   ${pdfUrl ? "  block " : " invisible z-0"}`}
+            ></div>
+            <div onClick={() => setPdfUrl(null)} />
+
+            <div
+              className={`relative w-[90%] md:w-[70%] h-[90%] bg-white rounded-xl  shadow-xl overflow-hidden transition-all ${pdfUrl ? " scale-100 block " : "scale-50  invisible z-0"}`}
+            >
+              {/* Close button */}
+              <button
                 onClick={() => setPdfUrl(null)}
-              />
+                className="absolute top-2 right-2 z-10 bg-red-500 text-white px-2 py-1 rounded  "
+              >
+                ✕
+              </button>
 
-              <div className="relative w-[90%] md:w-[70%] h-[90%] bg-white rounded-xl shadow-xl overflow-hidden">
-                {/* Close button */}
-                <button
-                  onClick={() => setPdfUrl(null)}
-                  className="absolute top-2 right-2 z-10 bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  ✕
-                </button>
-
-                <div className="h-full overflow-auto p-2">
-                  <Document file={pdfUrl}>
-                    <Page pageNumber={1} />
-                  </Document>
-                </div>
+              <div className="h-full overflow-auto p-2">
+                <Document file={pdfUrl}>
+                  <Page pageNumber={1} />
+                </Document>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </>

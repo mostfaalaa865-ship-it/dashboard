@@ -24,6 +24,7 @@ function Messages() {
         data={conversation.data}
         modal={"client"}
         action={false}
+        url={"/dashboard/chat/"}
       />
     </>
   );

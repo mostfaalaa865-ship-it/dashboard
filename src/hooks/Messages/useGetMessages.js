@@ -4,9 +4,13 @@ import { useContext, useEffect, useState } from "react";
 import { MessageContext } from "../../context/messagesContext";
 function useGetMessages(page, id) {
   const [loading, setLoading] = useState(false);
-
+  const [oldpage, setOldpage] = useState([]);
   const { GetMessages, setGetMessages } = useContext(MessageContext);
+  console.log(oldpage);
 
+  useEffect(() => {
+    setOldpage((prev) => [...prev, page]);
+  }, []);
   useEffect(() => {
     setLoading(true);
 
@@ -15,7 +19,11 @@ function useGetMessages(page, id) {
     )
       .then((res) => {
         const newMessages = res.data.data.reverse();
-        setGetMessages((prev) => [...newMessages, ...prev]);
+        if (page) {
+          setGetMessages((prev) => [...newMessages, ...prev]);
+        } else {
+          setGetMessages([...newMessages]);
+        }
       })
       .catch((err) => {
         console.log(err);
