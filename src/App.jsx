@@ -14,6 +14,32 @@ import useUser from "./hooks/useUser";
 import { NotificationsContext } from "./context/numNotifications";
 import { MessageContext } from "./context/messagesContext";
 import showDesktopNotification from "./helper/showDesktopNotification"
+import logo from "./assets/Icons/logo.svg";
+// import {
+//   RPProvider,
+//   RPDefaultLayout,
+//   RPPages,
+//   RPConfig,
+// } from "@pdf-viewer/react";
+
+import { pdfjs } from "react-pdf";
+import workerSrc from "pdfjs-dist/build/pdf.worker.min?url";
+
+pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+
+function showNotification(message) {
+  if (!("Notification" in window)) {
+    return;
+  }
+
+  if (Notification.permission === "granted") {
+    new Notification("new message", {
+      body: message.message.body,
+      tag: Date.now().toString(),
+      icon: logo,
+    });
+  }
+}
 
 function App() {
   const { user } = useUser();
@@ -21,9 +47,8 @@ function App() {
   const { setGetMessages } = useContext(MessageContext);
 
   useEffect(() => {
-    if ("Notification" in window) {
+    if ("Notification" in window && Notification.permission === "default") {
       Notification.requestPermission();
-      console.log("hello");
     }
   }, []);
 
@@ -67,9 +92,11 @@ function App() {
             "New Notification",
             notification.data.body
           );
+          setnotifications2((prev) => [notification, ...prev]);
         } else if (parsed.event == "MessageSent") {
           console.log(parsed.data);
           const message = JSON.parse(parsed.data);
+          showNotification(message);
           setGetMessages((prev) => [...prev, message.message]);
         }
         console.log(parsed);
@@ -84,6 +111,14 @@ function App() {
 
   return (
     <>
+      {/* <RPConfig>
+        <RPProvider src="https://mostafa.nageeb-darwish.cloud/storage/message_attachments/diwLXlVI14y0ps8nKldGzmq8fibt6tTwD3UGfBOs.pdf">
+          <RPDefaultLayout style={{ height: "660px" }}>
+            <RPPages />
+          </RPDefaultLayout>
+        </RPProvider>
+      </RPConfig> */}
+      ;
       <Routes>
         <Route element={<RequireAuth />}>
           <Route path="/" element={<Dashboard />} />
