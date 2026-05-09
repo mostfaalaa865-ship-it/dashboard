@@ -6,11 +6,13 @@ import TableSkeleton from "../TableSkeleton";
 import ModalProduct from "./modals/ModalProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
-function Table({ data, headers, Delete, modal, action = true }) {
+function Table({ data, headers, Delete, modal, url, action = true }) {
   const [showModal, setShowModal] = useState(false);
   const [currentClient, setCurrentClient] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
+  const navgatie = useNavigate();
 
   return (
     <div className="rounded-3xl px-4 ">
@@ -92,7 +94,12 @@ function Table({ data, headers, Delete, modal, action = true }) {
                     </td>
                   ) : (
                     <td className="cursor-pointer">
-                      <FontAwesomeIcon icon={faEye} />
+                      <FontAwesomeIcon
+                        icon={faEye}
+                        onClick={() => {
+                          navgatie(`${url}${item.id}`);
+                        }}
+                      />
                     </td>
                   )}
                 </tr>

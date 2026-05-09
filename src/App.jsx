@@ -111,13 +111,6 @@ function App() {
 
   return (
     <>
-      {/* <RPConfig>
-        <RPProvider src="https://mostafa.nageeb-darwish.cloud/storage/message_attachments/diwLXlVI14y0ps8nKldGzmq8fibt6tTwD3UGfBOs.pdf">
-          <RPDefaultLayout style={{ height: "660px" }}>
-            <RPPages />
-          </RPDefaultLayout>
-        </RPProvider>
-      </RPConfig> */}
       ;
       <Routes>
         <Route element={<RequireAuth />}>
