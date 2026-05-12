@@ -4,12 +4,14 @@ import { ReRender } from "../../context/ReRender";
 import { Companies } from "../../Api/Api";
 
 function useClients() {
+  const [page, setpage] = useState(1);
+
   const render = useContext(ReRender);
 
   const [companies, setcompanies] = useState([]);
 
   function getCompanies() {
-    Axios.get(`${Companies}?page=1&per_page=15&search=`)
+    Axios.get(`${Companies}?page=${page}&per_page=5&search=`)
       .then((res) => {
         setcompanies(res.data);
       })
@@ -19,14 +21,14 @@ function useClients() {
   }
   useEffect(() => {
     getCompanies();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     if (render.isRender.includes("b")) {
       getCompanies();
     }
-  }, [render.isRender]);
-  return { companies };
+  }, [render.isRender, page]);
+  return { companies, page, setpage };
 }
 
 export default useClients;

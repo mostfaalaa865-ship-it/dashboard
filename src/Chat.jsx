@@ -10,7 +10,6 @@ import { Axios } from "./Api/Axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { Document, Page } from "react-pdf";
-import { object } from "zod";
 
 function Chat() {
   const [page, setpage] = useState(1);

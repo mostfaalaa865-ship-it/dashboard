@@ -7,7 +7,7 @@ import TableSkeleton from "../TableSkeleton";
 function Companies() {
   const { handleDeleteCompanies } = useDeleteCompanies();
 
-  const { companies } = useCompanieS();
+  const { companies, page, setpage } = useCompanieS();
 
   const headers = [
     { key: "name", value: "Name" },
@@ -28,11 +28,13 @@ function Companies() {
       />
 
       <Table
-        data={companies.data}
+        data={companies}
         headers={headers}
         name={"companies"}
         Delete={handleDeleteCompanies}
         modal={"companies"}
+        page={page}
+        setpage={setpage}
       />
     </div>
   );

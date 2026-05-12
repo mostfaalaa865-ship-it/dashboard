@@ -5,7 +5,7 @@ import useDeleteClient from "../hooks/Clients/useDeleteClient";
 import TableSkeleton from "../TableSkeleton";
 
 function Clients() {
-  const Clients = useClients();
+  const { clients, page, setpage } = useClients();
   const { handleDelete } = useDeleteClient();
 
   const headers = [
@@ -27,10 +27,12 @@ function Clients() {
       />
 
       <Table
-        data={Clients.clients.data}
+        data={clients}
         headers={headers}
         Delete={handleDelete}
         modal={"client"}
+        page={page}
+        setpage={setpage}
       />
 
       <TableSkeleton rows={4} cols={6} />

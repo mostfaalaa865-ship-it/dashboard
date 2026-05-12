@@ -1,16 +1,10 @@
 import { Axios } from "../../Api/Axios";
 import { baseURL, conversations, messages } from "../../Api/Api";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MessageContext } from "../../context/messagesContext";
 function useGetMessages(page, id) {
   const [loading, setLoading] = useState(false);
-  const [oldpage, setOldpage] = useState([]);
   const { GetMessages, setGetMessages } = useContext(MessageContext);
-  const prevPageRef = useRef(page);
-
-  useEffect(() => {
-    prevPageRef.current = page;
-  }, [page]);
 
   useEffect(() => {
     setLoading(true);

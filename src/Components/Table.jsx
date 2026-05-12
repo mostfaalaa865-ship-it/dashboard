@@ -7,12 +7,23 @@ import ModalProduct from "./modals/ModalProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import PaginatedItems from "./PaginatedItems";
 
-function Table({ data, headers, Delete, modal, url, action = true }) {
+function Table({
+  data,
+  headers,
+  Delete,
+  modal,
+  url,
+  setpage,
+  page,
+  action = true,
+}) {
   const [showModal, setShowModal] = useState(false);
   const [currentClient, setCurrentClient] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
   const navgatie = useNavigate();
+  console.log(data);
 
   return (
     <div className="rounded-3xl px-4 ">
@@ -31,7 +42,7 @@ function Table({ data, headers, Delete, modal, url, action = true }) {
 
           <tbody className="w-full">
             {data ? (
-              data?.map((item) => (
+              data.data?.map((item) => (
                 <tr
                   key={item.id}
                   className="text-sm text-[#25272D] text-[14px]"
@@ -129,6 +140,19 @@ function Table({ data, headers, Delete, modal, url, action = true }) {
           id={currentClient}
         />
       )}
+      <div className="flex items-center justify-between w-full  ">
+        {data?.data?.length > 0 ? (
+          <div className="m-auto">
+            <PaginatedItems
+              pageCount={data.last_page}
+              currentPage={(data.current_page || 1) - 1}
+              onPageChange={setpage}
+            />
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }
