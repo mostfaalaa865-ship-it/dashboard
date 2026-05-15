@@ -6,7 +6,8 @@ import useDeleteProduct from "../hooks/Products/useDeleteProduct";
 import TableSkeleton from "../TableSkeleton";
 
 function Products() {
-  const { products2 } = useProducts();
+  const { products2, page, setpage, searchValue, setsearchValue } =
+    useProducts();
   const { handleDelete } = useDeleteProduct();
   const headers = [
     { key: "title", value: "Name" },
@@ -23,6 +24,8 @@ function Products() {
         name2={"Features"}
         name3={"Coupons"}
         name4={"Tax rates"}
+        setsearchValue={setsearchValue}
+        searchValue={searchValue}
       />
 
       <Table
@@ -30,6 +33,8 @@ function Products() {
         data={products2}
         Delete={handleDelete}
         modal={"products"}
+        page={page}
+        setpage={setpage}
       />
     </div>
   );

@@ -4,6 +4,7 @@ import useListConversation from "../hooks/Messages/useListConversation.JS";
 import TableSkeleton from "../TableSkeleton";
 function Messages() {
   const { conversation } = useListConversation();
+
   const headers = [
     { key: "customer", value: "Customer" },
     { key: "conversation", value: "Conversation" },
@@ -21,7 +22,7 @@ function Messages() {
 
       <Table
         headers={headers}
-        data={conversation.data}
+        data={conversation}
         modal={"client"}
         action={false}
         url={"/dashboard/chat/"}

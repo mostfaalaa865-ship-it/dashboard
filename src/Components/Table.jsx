@@ -9,16 +9,7 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import PaginatedItems from "./PaginatedItems";
 
-function Table({
-  data,
-  headers,
-  Delete,
-  modal,
-  url,
-  setpage,
-  page,
-  action = true,
-}) {
+function Table({ data, headers, Delete, modal, url, setpage, action = true }) {
   const [showModal, setShowModal] = useState(false);
   const [currentClient, setCurrentClient] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);

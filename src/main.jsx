@@ -8,17 +8,19 @@ import "./index.css";
 import App from "./App.jsx";
 import GetUser from "./context/GetUser.jsx";
 import Render from "./context/ReRender.jsx";
-
+import FilterProvider from "./context/FilterProvider.jsx";
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
   <BrowserRouter>
     <GetUser>
       <Render>
-        <MessageContextProvider>
-          <NotificationsProvider>
-            <App />
-          </NotificationsProvider>
-        </MessageContextProvider>
+        <FilterProvider>
+          <MessageContextProvider>
+            <NotificationsProvider>
+              <App />
+            </NotificationsProvider>
+          </MessageContextProvider>
+        </FilterProvider>
       </Render>
     </GetUser>
   </BrowserRouter>,

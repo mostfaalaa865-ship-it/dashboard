@@ -14,10 +14,10 @@ export default function PaginatedItems({
       pageCount={pageCount}
       forcePage={currentPage}
       containerClassName="flex gap-2 mt-4"
-      pageClassName="border border-[#6696F5] px-3 py-1 rounded cursor-pointer"
-      activeClassName="bg-[#6696F5] text-white"
-      previousClassName="border border-[#6696F5] px-3 py-1 rounded cursor-pointer"
-      nextClassName="border border-[#6696F5] px-3 py-1 rounded cursor-pointer"
+      pageLinkClassName="border border-[#6696F5] px-3 py-1 rounded cursor-pointer"
+      activeLinkClassName="bg-[#6696F5] text-white"
+      previousLinkClassName="border border-[#6696F5] px-3 py-1 rounded cursor-pointer"
+      nextLinkClassName="border border-[#6696F5] px-3 py-1 rounded cursor-pointer"
     />
   );
 }

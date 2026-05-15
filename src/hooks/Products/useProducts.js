@@ -4,12 +4,15 @@ import { Axios } from "../../Api/Axios";
 import { ReRender } from "../../context/ReRender";
 
 function useProducts() {
+  const [page, setpage] = useState(1);
+  const [searchValue, setsearchValue] = useState("");
+  const [debouncehValue, setDebounceValue] = useState("");
   const { isRender } = useContext(ReRender);
   const [products2, serproducts2] = useState([]);
   function getdata() {
-    Axios.get(`${products}`)
+    Axios.get(`${products}?page=${page}&per_page=5&title=${debouncehValue}`)
       .then((res) => {
-        serproducts2(res.data.data);
+        serproducts2(res.data);
       })
       .catch((err) => {
         //err
@@ -17,7 +20,15 @@ function useProducts() {
   }
   useEffect(() => {
     getdata();
-  }, []);
+  }, [debouncehValue]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebounceValue(searchValue);
+    }, 700);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchValue]);
 
   useEffect(() => {
     if (isRender.includes("c")) {
@@ -25,7 +36,7 @@ function useProducts() {
     }
   }, [isRender]);
 
-  return { products2 };
+  return { products2, page, setpage, searchValue, setsearchValue };
 }
 
 export default useProducts;
