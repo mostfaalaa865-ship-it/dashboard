@@ -3,10 +3,12 @@ import Table from "../Components/Table";
 import useClients from "../hooks/Clients/useClients";
 import useDeleteClient from "../hooks/Clients/useDeleteClient";
 import TableSkeleton from "../TableSkeleton";
+import { useState } from "react";
 
 function Clients() {
-  const { clients, page, setpage } = useClients();
+  const { clients, page, setpage, setsearchValue, searchValue } = useClients();
   const { handleDelete } = useDeleteClient();
+  const [open, setOpen] = useState(false);
 
   const headers = [
     { key: "full_name", value: "Name" },
@@ -17,6 +19,13 @@ function Clients() {
     { key: "location", value: "Location" },
   ];
 
+  const ClientsFilters = [
+    { label: "status", value: "status" },
+    { label: "Phone", value: "phone" },
+    { label: "email", value: "email" },
+    { label: "location", value: "location" },
+  ];
+
   return (
     <div>
       <TableNavlinks
@@ -24,6 +33,11 @@ function Clients() {
         name2={"Guests · 45"}
         name3={"Partners · 17"}
         name4={"Blocked · 3"}
+        setsearchValue={setsearchValue}
+        searchValue={searchValue}
+        setOpen={setOpen}
+        open={open}
+        filterOptions={ClientsFilters}
       />
 
       <Table
@@ -41,3 +55,5 @@ function Clients() {
 }
 
 export default Clients;
+
+///////////////////

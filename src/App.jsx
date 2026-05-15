@@ -13,14 +13,8 @@ import { Axios } from "./Api/Axios";
 import useUser from "./hooks/useUser";
 import { NotificationsContext } from "./context/numNotifications";
 import { MessageContext } from "./context/messagesContext";
-import showDesktopNotification from "./helper/showDesktopNotification"
+import showDesktopNotification from "./helper/showDesktopNotification";
 import logo from "./assets/Icons/logo.svg";
-// import {
-//   RPProvider,
-//   RPDefaultLayout,
-//   RPPages,
-//   RPConfig,
-// } from "@pdf-viewer/react";
 
 import { pdfjs } from "react-pdf";
 import workerSrc from "pdfjs-dist/build/pdf.worker.min?url";
@@ -88,10 +82,7 @@ function App() {
           const notification = JSON.parse(parsed.data);
 
           setnotifications2((prev) => [...prev, notification]);
-          showDesktopNotification(
-            "New Notification",
-            notification.data.body
-          );
+          showDesktopNotification("New Notification", notification.data.body);
           setnotifications2((prev) => [notification, ...prev]);
         } else if (parsed.event == "MessageSent") {
           console.log(parsed.data);
@@ -111,7 +102,6 @@ function App() {
 
   return (
     <>
-      ;
       <Routes>
         <Route element={<RequireAuth />}>
           <Route path="/" element={<Dashboard />} />
