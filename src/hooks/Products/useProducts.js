@@ -2,15 +2,26 @@ import { useContext, useEffect, useState } from "react";
 import { products } from "../../Api/Api";
 import { Axios } from "../../Api/Axios";
 import { ReRender } from "../../context/ReRender";
+import { FilterContext } from "../../context/FilterProvider";
 
 function useProducts() {
   const [page, setpage] = useState(1);
   const [searchValue, setsearchValue] = useState("");
   const [debouncehValue, setDebounceValue] = useState("");
-  const { isRender } = useContext(ReRender);
+  const { refresh } = useContext(ReRender);
   const [products2, serproducts2] = useState([]);
+  const { FilterValue, applyFilter } = useContext(FilterContext);
+
   function getdata() {
-    Axios.get(`${products}?page=${page}&per_page=5&title=${debouncehValue}`)
+    Axios.get(`${products}`, {
+      params: {
+        page,
+        per_page: 4,
+        title: debouncehValue,
+        search: searchValue,
+        ...FilterValue,
+      },
+    })
       .then((res) => {
         serproducts2(res.data);
       })
@@ -20,7 +31,7 @@ function useProducts() {
   }
   useEffect(() => {
     getdata();
-  }, [debouncehValue]);
+  }, [debouncehValue, applyFilter, refresh.products]);
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebounceValue(searchValue);
@@ -30,11 +41,11 @@ function useProducts() {
     };
   }, [searchValue]);
 
-  useEffect(() => {
-    if (isRender.includes("c")) {
-      getdata();
-    }
-  }, [isRender]);
+  // useEffect(() => {
+  //   if (isRender.includes("c")) {
+  //     getdata();
+  //   }
+  // }, [isRender]);
 
   return { products2, page, setpage, searchValue, setsearchValue };
 }

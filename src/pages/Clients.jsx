@@ -1,14 +1,27 @@
 import TableNavlinks from "../Components/TableNavlinks";
 import Table from "../Components/Table";
+import ModalClient from "../Components/modals/ModalClient";
 import useClients from "../hooks/Clients/useClients";
 import useDeleteClient from "../hooks/Clients/useDeleteClient";
 import TableSkeleton from "../TableSkeleton";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { FilterContext } from "../context/FilterProvider";
+import TopBar from "../Components/TopBar/TopBar";
+import ModalDelete from "../Components/modals/modalDelet";
 
 function Clients() {
   const { clients, page, setpage, setsearchValue, searchValue } = useClients();
   const { handleDelete } = useDeleteClient();
   const [open, setOpen] = useState(false);
+  const { resetFilter } = useContext(FilterContext);
+  const [showModal, setShowModal] = useState(false);
+  const [currentClient, setCurrentClient] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  useEffect(() => {
+    resetFilter();
+  }, []);
 
   const headers = [
     { key: "full_name", value: "Name" },
@@ -28,11 +41,14 @@ function Clients() {
 
   return (
     <div>
+      <TopBar title="Clients" onCreate={() => setShowModal(true)} />
       <TableNavlinks
-        name={"All · 40"}
-        name2={"Guests · 45"}
-        name3={"Partners · 17"}
-        name4={"Blocked · 3"}
+        tabs={[
+          { label: "All · 40" },
+          { label: "Guests · 45" },
+          { label: "Partners · 17" },
+          { label: "Blocked · 3" },
+        ]}
         setsearchValue={setsearchValue}
         searchValue={searchValue}
         setOpen={setOpen}
@@ -43,17 +59,42 @@ function Clients() {
       <Table
         data={clients}
         headers={headers}
-        Delete={handleDelete}
-        modal={"client"}
         page={page}
         setpage={setpage}
+        actions={[
+          {
+            label: "✏️",
+            onClick: (item) => {
+              setCurrentClient(item.id);
+              setShowModal(true);
+            },
+          },
+
+          {
+            label: "🗑",
+            onClick: (item) => {
+              setDeleteId(item.id);
+              setDeleteModal(true);
+            },
+          },
+        ]}
       />
 
-      <TableSkeleton rows={4} cols={6} />
+      <ModalClient
+        showModal={showModal}
+        setShowModal={setShowModal}
+        id={currentClient}
+        title="Create Client"
+      />
+      <ModalDelete
+        open={deleteModal}
+        setOpen={setDeleteModal}
+        title="Delete client "
+        message="Are you sure you want to delete this client?"
+        onConfirm={() => handleDelete(deleteId)}
+      />
     </div>
   );
 }
 
 export default Clients;
-
-///////////////////

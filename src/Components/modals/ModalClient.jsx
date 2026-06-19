@@ -68,6 +68,8 @@ function ModalClient({ showModal, setShowModal, id }) {
           id={id}
           setShowModal={setShowModal}
           disable={!(formik.isValid && formik.dirty)}
+          title={id ? "Update Client" : "Create Client"}
+          buttonText={id ? "Update" : "Create"}
         >
           <form
             id="form"

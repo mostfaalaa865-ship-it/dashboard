@@ -8,15 +8,19 @@ function useClients() {
   const [searchValue, setsearchValue] = useState("");
   const [debounceValue, setDebounceValue] = useState("");
 
-  const { FilterValue, filterType, applyFilter } = useContext(FilterContext);
+  const { FilterValue, applyFilter } = useContext(FilterContext);
 
   const [page, setpage] = useState(1);
-  const { isRender } = useContext(ReRender);
+  const { refresh } = useContext(ReRender);
   const [clients, setClients] = useState([]);
 
   function getData() {
     Axios.get(
-      `${baseURL}${Clients}?page=${page}&per_page=4&full_name=${debounceValue}&${filterType}=${FilterValue}`,
+      `${baseURL}${Clients}?page=${page}&per_page=4&full_name=${debounceValue}&${Object?.entries(
+        FilterValue,
+      )
+        ?.flatMap(([key, value]) => [key + "=" + value])
+        .join("&")}`,
     )
       .then((res) => {
         setClients(res.data);
@@ -27,7 +31,7 @@ function useClients() {
   }
   useEffect(() => {
     getData();
-  }, [page, debounceValue, applyFilter]);
+  }, [page, debounceValue, applyFilter, refresh.clients]);
 
   // debounce
   useEffect(() => {
@@ -37,13 +41,13 @@ function useClients() {
     return () => {
       clearTimeout(timer);
     };
-  }, [searchValue]);
+  }, [searchValue, page]);
   // this useeffect is for rerender operations
-  useEffect(() => {
-    if (isRender.includes("a")) {
-      getData();
-    }
-  }, [isRender, page]);
+  // useEffect(() => {
+  //   if (isRender.includes("a")) {
+  //     getData();
+  //   }
+  // }, [isRender, page]);
   return {
     clients,
     page,

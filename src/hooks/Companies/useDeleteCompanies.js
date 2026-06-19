@@ -4,14 +4,17 @@ import { Axios } from "../../Api/Axios";
 import { ReRender } from "../../context/ReRender";
 
 function useDeleteCompanies() {
-  const { setisRender } = useContext(ReRender);
+  const { setRefresh } = useContext(ReRender);
 
-  const time = "b" + Date.now();
+  // const time = "b" + Date.now();
 
   function handleDeleteCompanies(id) {
     Axios.delete(`${Companies}/${id}`)
       .then((res) => {
-        setisRender(time);
+        setRefresh((prev) => ({
+          ...prev,
+          company: prev.company + 1,
+        }));
       })
       .catch(() => {
         //err

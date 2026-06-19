@@ -9,15 +9,23 @@ function useClients() {
   const [searchValue, setsearchValue] = useState("");
   const [debouncehValue, setDebounceValue] = useState("");
 
-  const render = useContext(ReRender);
+  const { refresh } = useContext(ReRender);
 
   const [companies, setcompanies] = useState([]);
   const { FilterValue, filterType, applyFilter } = useContext(FilterContext);
+  console.log(filterType);
+  console.log(FilterValue);
 
   function getCompanies() {
-    Axios.get(
-      `${Companies}?page=${page}&name=${debouncehValue}&per_page=5&search=&${filterType}=${FilterValue}`,
-    )
+    Axios.get(`${Companies}`, {
+      params: {
+        page,
+        per_page: 4,
+        name: debouncehValue,
+        search: searchValue,
+        ...FilterValue,
+      },
+    })
       .then((res) => {
         setcompanies(res.data);
       })
@@ -27,7 +35,7 @@ function useClients() {
   }
   useEffect(() => {
     getCompanies();
-  }, [debouncehValue, page, applyFilter]);
+  }, [debouncehValue, page, applyFilter, refresh]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -38,11 +46,11 @@ function useClients() {
     };
   }, [searchValue]);
 
-  useEffect(() => {
-    if (render.isRender.includes("b")) {
-      getCompanies();
-    }
-  }, [render.isRender, page]);
+  // useEffect(() => {
+  //   if (render.isRender.includes("b")) {
+  //     getCompanies();
+  //   }
+  // }, [render.isRender, page]);
   return { companies, page, setpage, searchValue, setsearchValue };
 }
 
