@@ -4,10 +4,10 @@ import { Axios } from "../../Api/Axios";
 import { ReRender } from "../../context/ReRender";
 
 function useCreateProdcut({ setShowModal }) {
-  const time = "c" + Date.now();
+  // const time = "c" + Date.now();
 
   const [load, setload] = useState(false);
-  const { setisRender } = useContext(ReRender);
+  const { setRefresh } = useContext(ReRender);
 
   function handleCreateClient(formValues) {
     setload(true);
@@ -17,7 +17,10 @@ function useCreateProdcut({ setShowModal }) {
         console.log(res);
         setShowModal(false);
         setload(false);
-        setisRender(time);
+        setRefresh((prev) => ({
+          ...prev,
+          products: prev.products + 1,
+        }));
       })
       .catch((err) => {
         console.log(err);

@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 
-function Modal({ id, setShowModal, children, disable }) {
+function Modal({
+  title,
+  setShowModal,
+  children,
+  disable,
+  buttonText,
+  btndelete,
+  funDeleteSchedule,
+}) {
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -10,21 +18,6 @@ function Modal({ id, setShowModal, children, disable }) {
       document.body.style.overflow = originalOverflow;
     };
   }, []);
-
-  const location = useLocation();
-  const path = location.pathname;
-
-  let title = "Dashboard";
-
-  if (path.includes("Clients")) {
-    title = "create  Clients";
-  } else if (path.includes("Companies")) {
-    title = "create  Companies";
-  } else if (path.includes("Products")) {
-    title = "Add Product";
-  } else if (path.includes("Messages")) {
-    title = "Create Chat";
-  }
 
   return (
     <>
@@ -39,12 +32,9 @@ function Modal({ id, setShowModal, children, disable }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center bg-[#FBFBFC]  rounded-lg p-6 h-14.5 ">
-              <h3 className="text-lg font-medium">
-                {" "}
-                {id ? "update " + title : title}
-              </h3>
+              <h3 className="text-lg font-medium">{title}</h3>
               <svg
-                class="w-5 h-5"
+                className="w-5 h-5"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -70,13 +60,23 @@ function Modal({ id, setShowModal, children, disable }) {
                 type="submit"
                 className="h-8 px-4 flex justify-center items-center cursor-pointer text-white rounded-sm bg-[#6696F5] hover:bg-[#6287E6] transition whitespace-nowrap disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
               >
-                {id ? "Update" : "Create "}
+                {buttonText}
               </button>
               <button
-                type="button"
                 className="h-8 px-4 flex justify-center items-center cursor-pointer  border border-[#E2E4E9]   transition hover:bg-[#F3F4F6] gap-2  "
+                type="button"
+                onClick={() => setShowModal(false)}
               >
                 Cancel
+              </button>
+              <button
+                className="text-red-500 cursor-pointer border border-[#E2E4E9] px-3 py-1 ml-8"
+                onClick={() => {
+                  funDeleteSchedule();
+                  setShowModal(false);
+                }}
+              >
+                {btndelete}
               </button>
             </div>
           </div>

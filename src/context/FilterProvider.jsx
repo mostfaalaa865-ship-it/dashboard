@@ -2,19 +2,20 @@ import { createContext, useState } from "react";
 export const FilterContext = createContext("");
 
 function FilterProvider({ children }) {
-  const [FilterValue, setFilterValue] = useState("");
-  const [filterType, setFilterType] = useState("");
+  const [FilterValue, setFilterValue] = useState({});
   const [applyFilter, setApplyFilter] = useState(false);
+  function resetFilter() {
+    setFilterValue({});
+  }
 
   return (
     <FilterContext.Provider
       value={{
         FilterValue,
         setFilterValue,
-        filterType,
-        setFilterType,
         applyFilter,
         setApplyFilter,
+        resetFilter,
       }}
     >
       {children}

@@ -9,3 +9,7 @@ export const products = "/products";
 export const conversations = "/conversations";
 export const messages = "/messages";
 export const notifications = "/notifications";
+export const teams = "/teams";
+export const documents = "/documents";
+export const payments = "/payments";
+export const schedule = "/schedule";

@@ -4,14 +4,17 @@ import { products } from "../../Api/Api";
 import { ReRender } from "../../context/ReRender";
 
 function useDeleteProduct() {
-  const time = "c" + Date.now();
+  // const time = "c" + Date.now();
 
-  const { setisRender } = useContext(ReRender);
+  const { setRefresh } = useContext(ReRender);
   function handleDelete(id) {
     Axios.delete(`${products}/${id}`)
       .then((res) => {
         console.log(res);
-        setisRender(time);
+        setRefresh((prev) => ({
+          ...prev,
+          products: prev.products + 1,
+        }));
       })
       .catch((res) => {
         console.log(res);

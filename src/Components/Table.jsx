@@ -1,20 +1,27 @@
 import React, { useState } from "react";
-import ModalClient from "./modals/ModalClient";
-import ModalCompanies from "./modals/ModalCompanies";
 import menu from "../assets/menu/menu2.svg";
 import TableSkeleton from "../TableSkeleton";
-import ModalProduct from "./modals/ModalProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+
 import PaginatedItems from "./PaginatedItems";
 
-function Table({ data, headers, Delete, modal, url, setpage, action = true }) {
-  const [showModal, setShowModal] = useState(false);
-  const [currentClient, setCurrentClient] = useState(null);
+function Table({ data, headers, setpage, actions, action }) {
   const [openMenuId, setOpenMenuId] = useState(null);
-  const navgatie = useNavigate();
-  console.log(data);
+
+  const renderActions = (item) => {
+    return actions?.map((action, index) => (
+      <button
+        key={index}
+        onClick={() => {
+          action.onClick(item);
+          setOpenMenuId(null);
+        }}
+        className="block w-full text-left px-2 py-2 hover:bg-gray-100"
+      >
+        {action.label}
+      </button>
+    ));
+  };
 
   return (
     <div className="rounded-3xl px-4 ">
@@ -27,83 +34,65 @@ function Table({ data, headers, Delete, modal, url, setpage, action = true }) {
                   {item.value}
                 </th>
               ))}
-              <th></th>
+              <th className="px-4 py-2"></th>
             </tr>
           </thead>
 
           <tbody className="w-full">
-            {data ? (
+            {data?.data ? (
               data.data?.map((item) => (
                 <tr
                   key={item.id}
                   className="text-sm text-[#25272D] text-[14px]"
                 >
-                  {headers?.map((client) => (
-                    <td
-                      key={client.key}
-                      className={`px-4 py-2 ${
-                        client.key === "email" || client.key === "link"
-                          ? "text-[#5B75D2] font-medium underline"
-                          : client.key === "name" ||
-                              client.key === "full_name" ||
-                              client.key === "title"
-                            ? "text-[#25372D] font-medium line-clamp-3"
-                            : "text-[#25272D] text-[15px]"
-                      }`}
-                    >
-                      {item[client.key]}
-                    </td>
-                  ))}
+                  {headers?.map((client) => {
+                    const itemData = item[client.key];
 
-                  {action ? (
-                    <td
-                      className="px-4 py-2 relative"
-                      onClick={() =>
-                        setOpenMenuId(openMenuId === item.id ? null : item.id)
-                      }
-                    >
+                    return (
+                      <td
+                        key={client.key}
+                        className={`px-4 py-2 ${
+                          client.key === "email" || client.key === "link"
+                            ? "text-[#5B75D2] font-medium underline"
+                            : client.key === "name" ||
+                                client.key === "full_name" ||
+                                client.key === "title"
+                              ? "text-[#25372D] font-medium line-clamp-3"
+                              : "text-[#25272D] text-[15px]"
+                        }`}
+                      >
+                        <div className="flex gap-3">
+                          {" "}
+                          {Array.isArray(itemData)
+                            ? itemData.map((item) => <p>{item}</p>)
+                            : itemData}
+                        </div>
+                      </td>
+                    );
+                  })}
+
+                  <td
+                    className="px-4 py-2 relative"
+                    onClick={() =>
+                      setOpenMenuId(openMenuId === item.id ? null : item.id)
+                    }
+                  >
+                    {action ? (
+                      renderActions(item)
+                    ) : (
                       <button
                         className="text-heading bg-neutral-primary box-border border border-transparent hover:bg-neutral-secondary-medium f"
                         type="button"
                       >
                         <img src={menu} />
                       </button>
-
-                      {openMenuId === item.id && (
-                        <div className="absolute right-2 top-0  mt-1 w-22  bg-white border rounded shadow z-50 flex items-center justify-center">
-                          <button
-                            onClick={() => {
-                              setCurrentClient(item.id);
-                              setShowModal(true);
-                              setOpenMenuId(null);
-                            }}
-                            className="block w-full text-left px-2 py-2 hover:bg-gray-100"
-                          >
-                            ✏️
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              Delete(item.id);
-                              setOpenMenuId(null);
-                            }}
-                            className="block w-full text-left  px-2 py-2 text-red-600 hover:bg-gray-100"
-                          >
-                            🗑
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                  ) : (
-                    <td className="cursor-pointer">
-                      <FontAwesomeIcon
-                        icon={faEye}
-                        onClick={() => {
-                          navgatie(`${url}${item.id}`);
-                        }}
-                      />
-                    </td>
-                  )}
+                    )}
+                    {openMenuId === item.id && (
+                      <div className="absolute right-2 top-0  mt-1 w-22  bg-white border rounded shadow z-50 flex items-center justify-center">
+                        {renderActions(item)}
+                      </div>
+                    )}
+                  </td>
                 </tr>
               ))
             ) : (
@@ -112,25 +101,7 @@ function Table({ data, headers, Delete, modal, url, setpage, action = true }) {
           </tbody>
         </table>
       </div>
-      {modal == "client" ? (
-        <ModalClient
-          showModal={showModal}
-          setShowModal={setShowModal}
-          id={currentClient}
-        />
-      ) : modal == "companies" ? (
-        <ModalCompanies
-          showModal={showModal}
-          setShowModal={setShowModal}
-          id={currentClient}
-        />
-      ) : (
-        <ModalProduct
-          showModal={showModal}
-          setShowModal={setShowModal}
-          id={currentClient}
-        />
-      )}
+
       <div className="flex items-center justify-between w-full  ">
         {data?.data?.length > 0 ? (
           <div className="m-auto">

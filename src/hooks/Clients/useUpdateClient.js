@@ -4,9 +4,9 @@ import { Axios } from "../../Api/Axios";
 import { ReRender } from "../../context/ReRender";
 
 function useUpdateClient({ setShowModal }) {
-  const time = "a" + Date.now();
+  // const time = "a" + Date.now();
 
-  const { setisRender } = useContext(ReRender);
+  const { setRefresh } = useContext(ReRender);
 
   const [load, setload] = useState(false);
 
@@ -17,7 +17,10 @@ function useUpdateClient({ setShowModal }) {
       .then((res) => {
         setShowModal(false);
         setload(false);
-        setisRender(time);
+        setRefresh((prev) => ({
+          ...prev,
+          clients: prev.clients + 1,
+        }));
       })
       .catch(() => {
         // log

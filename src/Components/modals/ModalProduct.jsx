@@ -50,7 +50,7 @@ function ModalProduct({ showModal, setShowModal, id }) {
 
     formik.setValues({
       Product_name: product.product.title || "",
-      Category: product.product.tags[0] || "",
+      Category: product.product.tags?.[0] || "",
       Qty: product.product.qty || "",
       SKU: product.product.sku || "",
       sales: product.product.sales || "",
@@ -74,6 +74,8 @@ function ModalProduct({ showModal, setShowModal, id }) {
           id={id}
           setShowModal={setShowModal}
           disable={!(formik.isValid && formik.dirty)}
+          title={id ? "Update product" : "Create product"}
+          buttonText={id ? "Update" : "Create"}
         >
           <form
             id="form"

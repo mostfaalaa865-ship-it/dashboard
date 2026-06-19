@@ -4,10 +4,10 @@ import { Axios } from "../../Api/Axios";
 import { ReRender } from "../../context/ReRender";
 
 function useCerateClient({ setShowModal }) {
-  const time = "a" + Date.now();
+  // const time = "a" + Date.now();
 
   const [load, setload] = useState(false);
-  const { setisRender } = useContext(ReRender);
+  const { setRefresh } = useContext(ReRender);
 
   function handleCreateClient(formValues) {
     setload(true);
@@ -16,7 +16,10 @@ function useCerateClient({ setShowModal }) {
       .then((res) => {
         setShowModal(false);
         setload(false);
-        setisRender(time);
+        setRefresh((prev) => ({
+          ...prev,
+          clients: prev.clients + 1,
+        }));
       })
       .catch(() => {
         setload(false);

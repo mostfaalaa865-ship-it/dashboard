@@ -4,8 +4,8 @@ import { Axios } from "../../Api/Axios";
 import { ReRender } from "../../context/ReRender";
 
 function useUpdateProduct({ setShowModal }) {
-  const time = "c" + Date.now();
-  const { setisRender } = useContext(ReRender);
+  // const time = "c" + Date.now();
+  const { setRefresh } = useContext(ReRender);
 
   const [load, setload] = useState(false);
 
@@ -14,7 +14,10 @@ function useUpdateProduct({ setShowModal }) {
     Axios.put(`${products}/${id}`, formValues)
 
       .then((res) => {
-        setisRender(time);
+        setRefresh((prev) => ({
+          ...prev,
+          products: prev.products + 1,
+        }));
 
         setShowModal(false);
         setload(false);

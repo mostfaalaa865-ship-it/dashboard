@@ -46,9 +46,9 @@ export const links = [
     icon: Notifications,
   },
   {
-    name: "Automation",
-    path: "Automation",
-    icon: Automation,
+    name: "Team",
+    path: "Team",
+    icon: Clients,
   },
 ];
 
@@ -59,8 +59,8 @@ export const Applinks = [
     icon: Messages,
   },
   {
-    name: "Files",
-    path: "Files",
+    name: "documents",
+    path: "documents",
     icon: Files,
   },
   {

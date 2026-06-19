@@ -3,7 +3,7 @@ import VectorIcon2 from "./Vector2.svg";
 import Logout from "../../Auth/Logout";
 import { useContext, useState } from "react";
 import { User } from "../../context/GetUser";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import ModalCompanies from "../modals/ModalCompanies";
 import ModalClient from "../modals/ModalClient";
 import ModalProduct from "../modals/ModalProduct";
@@ -11,31 +11,18 @@ import ModalMessages from "../modals/ModalMessages";
 import Notificationsicon from "../../assets/Icons/Vector-3.svg";
 import Notifications from "../../Notifications";
 import { NotificationsContext } from "../../context/numNotifications";
+import ModalTeam from "../modals/ModalTeam";
 
-function TopBar() {
-  const [showModal, setShowModal] = useState(false);
+function TopBar({ title, onCreate }) {
+  // const [showModal, setShowModal] = useState(false);
   const userContext = useContext(User);
   const [show, setshow] = useState(false);
-  const location = useLocation();
-  const path = location.pathname;
+  // const location = useLocation();
+  // const path = location.pathname;
   const { notifications2 } = useContext(NotificationsContext);
   const numNotifications = notifications2.filter(
     (n) => n.read_at === null,
   ).length;
-
-  let title = "";
-
-  if (path.includes("Clients")) {
-    title = "Clients";
-  } else if (path.includes("Companies")) {
-    title = "Companies";
-  } else if (path.includes("Products")) {
-    title = "Products";
-  } else if (path.includes("Messages")) {
-    title = "Messages";
-  } else if (path.includes("xx")) {
-    title = "Re: New invoice regulation (E-Rechnung)";
-  }
 
   return (
     <div>
@@ -85,7 +72,8 @@ function TopBar() {
             transition
             whitespace-nowrap
           "
-            onClick={() => setShowModal(true)}
+            // onClick={() => setShowModal(true)}
+            onClick={onCreate}
           >
             {title === "Messages" ? "New Chat" : `Create ${title}`}
           </button>
@@ -125,15 +113,19 @@ function TopBar() {
         </div>
       </div>
 
-      {title == "Clients" ? (
+      {/* {title == "Clients" ? (
         <ModalClient showModal={showModal} setShowModal={setShowModal} />
       ) : title == "Companies" ? (
         <ModalCompanies showModal={showModal} setShowModal={setShowModal} />
       ) : title == "Messages" ? (
         <ModalMessages showModal={showModal} setShowModal={setShowModal} />
-      ) : (
+      ) : title == "Products" ? (
         <ModalProduct showModal={showModal} setShowModal={setShowModal} />
-      )}
+      ) : title == "Team" ? (
+        <ModalTeam showModal={showModal} setShowModal={setShowModal} />
+      ) : (
+        ""
+      )} */}
     </div>
   );
 }

@@ -88,6 +88,8 @@ function ModalCompanies({ showModal, setShowModal, id }) {
           id={id}
           setShowModal={setShowModal}
           disable={!(formik.isValid && formik.dirty)}
+          title={id ? "Update company" : "Create company"}
+          buttonText={id ? "Update" : "Create"}
         >
           <form
             id="form"

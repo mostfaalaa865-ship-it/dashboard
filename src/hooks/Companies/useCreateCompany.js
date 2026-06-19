@@ -4,10 +4,10 @@ import { ReRender } from "../../context/ReRender";
 import { Axios } from "../../Api/Axios";
 
 function useCreateCompany({ setShowModal }) {
-  const time = "b" + Date.now();
+  // const time = "b" + Date.now();
 
   const [load, setload] = useState(false);
-  const { setisRender } = useContext(ReRender);
+  const { setRefresh } = useContext(ReRender);
 
   function handleCreatecompany(formValues) {
     setload(true);
@@ -15,7 +15,10 @@ function useCreateCompany({ setShowModal }) {
       .then((res) => {
         setShowModal(false);
         setload(false);
-        setisRender(time);
+        setRefresh((prev) => ({
+          ...prev,
+          company: prev.company + 1,
+        }));
       })
       .catch(() => {
         setload(false);

@@ -5,7 +5,6 @@ import TopBar from "./TopBar/TopBar";
 function Dashboard() {
   return (
     <div className="relative">
-      <TopBar />
       <div className="flex  ">
         <SideBar />
         <div className="flex-1 mt-14  ">

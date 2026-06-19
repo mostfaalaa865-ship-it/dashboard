@@ -18,6 +18,11 @@ import logo from "./assets/Icons/logo.svg";
 
 import { pdfjs } from "react-pdf";
 import workerSrc from "pdfjs-dist/build/pdf.worker.min?url";
+import Team from "./pages/Team";
+import Documents from "./pages/Documents.JSX";
+import UpdateDocuments from "./pages/UpdateDocuments";
+import Schedule from "./pages/Schedule";
+import Sales from "./pages/Sales";
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -109,8 +114,13 @@ function App() {
             <Route path="Clients" element={<Clients />} />
             <Route path="Companies" element={<Companies />} />
             <Route path="Products" element={<Products />} />
+            <Route path="Team" element={<Team />} />
             <Route path="Messages" element={<Messages />} />
+            <Route path="documents" element={<Documents />} />
+            <Route path="Sales" element={<Sales />} />
+            <Route path="documents/update/:id" element={<UpdateDocuments />} />
             <Route path="chat/:id" element={<Chat />} />{" "}
+            <Route path="Schedule" element={<Schedule />} />{" "}
           </Route>
         </Route>
 
