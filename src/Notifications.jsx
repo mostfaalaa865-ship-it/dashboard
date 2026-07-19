@@ -4,14 +4,20 @@ import { NotificationsContext } from "./context/numNotifications";
 import useReadAll from "./hooks/notifications/useReadAll";
 import useRead from "./hooks/notifications/useRead";
 import { useNavigate } from "react-router-dom";
+import TopBar from "./Components/TopBar/TopBar";
 
-function Notifications({ setshow }) {
+function Notifications({ setshow, type }) {
   const navigate = useNavigate();
   const { notifications2, setPage, loading } = useContext(NotificationsContext);
   const { handleReadAll } = useReadAll();
   const { handleRead } = useRead();
   const containerRef = useRef();
-  console.log(notifications2);
+
+  const style = {
+    popup:
+      "bg-white right-0 top-[15px]  h-[620px]  w-[466px] rounded-3xl shadow-2xl absolute border  border-[#E2E4E9] z-50",
+    page: "bg-white w-[70%] mx-auto min-h-[100%] rounded-3xl border border-[#E2E4E9] shadow-sm p-6",
+  };
 
   function timeAgo(dateString) {
     const date = new Date(dateString);
@@ -58,8 +64,10 @@ function Notifications({ setshow }) {
 
   return (
     <div>
-      <div className="bg-white right-0 top-[15px]  h-[620px]  w-[466px] rounded-3xl shadow-2xl absolute border  border-[#E2E4E9] ">
-        <div className=" border-b border-[#ECEDF0] h-12 flex items-center justify-between p-3   ">
+      {type === "page" ? <TopBar title={"Notifications"} /> : ""}
+
+      <div className={style[type]}>
+        <div className=" border-b border-[#ECEDF0] h-12 flex items-center justify-between p-3    ">
           <h3 className="text-[#25272D] text-lg font-medium"> Notifications</h3>
           <p className="text-[#8F929C] cursor-pointer" onClick={handleReadAll}>
             Mark all as read

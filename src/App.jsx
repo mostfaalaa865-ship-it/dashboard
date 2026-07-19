@@ -23,6 +23,11 @@ import Documents from "./pages/Documents.JSX";
 import UpdateDocuments from "./pages/UpdateDocuments";
 import Schedule from "./pages/Schedule";
 import Sales from "./pages/Sales";
+import Notifications from "./Notifications";
+import Forms from "./pages/Forms";
+import FormShow from "./pages/FormShow";
+import FormClient from "./pages/FormClient";
+import ShowSubmissions from "./pages/ShowSubmissions";
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -113,16 +118,24 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="Clients" element={<Clients />} />
             <Route path="Companies" element={<Companies />} />
+            <Route
+              path="Notifications"
+              element={<Notifications type="page" />}
+            />
             <Route path="Products" element={<Products />} />
             <Route path="Team" element={<Team />} />
             <Route path="Messages" element={<Messages />} />
             <Route path="documents" element={<Documents />} />
             <Route path="Sales" element={<Sales />} />
+            <Route path="Forms" element={<Forms />} />
+            <Route path="Forms/show/:id" element={<FormShow />} />
             <Route path="documents/update/:id" element={<UpdateDocuments />} />
             <Route path="chat/:id" element={<Chat />} />{" "}
             <Route path="Schedule" element={<Schedule />} />{" "}
+            <Route path="ShowSubmissions/:id" element={<ShowSubmissions />} />
           </Route>
         </Route>
+        <Route path="/forms/:id" element={<FormClient />} />
 
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />

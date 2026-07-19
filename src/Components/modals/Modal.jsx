@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-// import { useLocation } from "react-router-dom";
 
 function Modal({
   title,
@@ -69,15 +68,19 @@ function Modal({
               >
                 Cancel
               </button>
-              <button
-                className="text-red-500 cursor-pointer border border-[#E2E4E9] px-3 py-1 ml-8"
-                onClick={() => {
-                  funDeleteSchedule();
-                  setShowModal(false);
-                }}
-              >
-                {btndelete}
-              </button>
+              {funDeleteSchedule ? (
+                <button
+                  className="text-red-500 cursor-pointer border border-[#E2E4E9] px-3 py-1 ml-8"
+                  onClick={() => {
+                    funDeleteSchedule();
+                    setShowModal(false);
+                  }}
+                >
+                  {btndelete}
+                </button>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>

@@ -3,7 +3,6 @@ import VectorIcon2 from "./Vector2.svg";
 import Logout from "../../Auth/Logout";
 import { useContext, useState } from "react";
 import { User } from "../../context/GetUser";
-// import { useLocation } from "react-router-dom";
 import ModalCompanies from "../modals/ModalCompanies";
 import ModalClient from "../modals/ModalClient";
 import ModalProduct from "../modals/ModalProduct";
@@ -14,11 +13,9 @@ import { NotificationsContext } from "../../context/numNotifications";
 import ModalTeam from "../modals/ModalTeam";
 
 function TopBar({ title, onCreate }) {
-  // const [showModal, setShowModal] = useState(false);
   const userContext = useContext(User);
   const [show, setshow] = useState(false);
-  // const location = useLocation();
-  // const path = location.pathname;
+
   const { notifications2 } = useContext(NotificationsContext);
   const numNotifications = notifications2.filter(
     (n) => n.read_at === null,
@@ -92,7 +89,7 @@ function TopBar({ title, onCreate }) {
             <div className="absolute -top-2 -right-1 w-4 h-4 flex items-center justify-center rounded-full bg-[#6696F5] text-white text-[10px]">
               {numNotifications}
             </div>
-            {show && <Notifications setshow={setshow} />}
+            {show && <Notifications setshow={setshow} type={"popup"} />}
           </div>
           <Logout />
 
@@ -112,20 +109,6 @@ function TopBar({ title, onCreate }) {
           </div>
         </div>
       </div>
-
-      {/* {title == "Clients" ? (
-        <ModalClient showModal={showModal} setShowModal={setShowModal} />
-      ) : title == "Companies" ? (
-        <ModalCompanies showModal={showModal} setShowModal={setShowModal} />
-      ) : title == "Messages" ? (
-        <ModalMessages showModal={showModal} setShowModal={setShowModal} />
-      ) : title == "Products" ? (
-        <ModalProduct showModal={showModal} setShowModal={setShowModal} />
-      ) : title == "Team" ? (
-        <ModalTeam showModal={showModal} setShowModal={setShowModal} />
-      ) : (
-        ""
-      )} */}
     </div>
   );
 }

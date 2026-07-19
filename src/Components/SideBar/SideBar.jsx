@@ -28,7 +28,10 @@ function SideBar() {
             <NavLink
               to={item.path}
               key={item.name}
-              className="flex items-center my-2 gap-1 rounded-md p-0.5  active:bg-white hover:bg-[#ECEDF0]"
+              className={({ isActive }) =>
+                `flex items-center my-2 gap-1 rounded-md p-0.5
+    ${isActive ? "bg-white" : "hover:bg-[#ECEDF0]"}`
+              }
             >
               <img src={item.icon} className="w-3.5 h-3.5 mx-1.5" />
               <p>{item.name}</p>
@@ -41,7 +44,10 @@ function SideBar() {
               <NavLink
                 to={item.path}
                 key={item.name}
-                className="flex items-center my-2 gap-1 rounded-md p-0.5  active:bg-white hover:bg-[#ECEDF0]"
+                className={({ isActive }) =>
+                  `flex items-center my-2 gap-1 rounded-md p-0.5
+    ${isActive ? "bg-white" : "hover:bg-[#ECEDF0]"}`
+                }
               >
                 <img src={item.icon} className="w- h-3.5 mx-1.5" />
                 <p>{item.name}</p>
@@ -55,7 +61,10 @@ function SideBar() {
             <NavLink
               to={item.path}
               key={item.name}
-              className="flex items-center my-2 gap-1 rounded-md p-0.5  active:bg-white hover:bg-[#ECEDF0]"
+              className={({ isActive }) =>
+                `flex items-center my-2 gap-1 rounded-md p-0.5
+    ${isActive ? "bg-white" : "hover:bg-[#ECEDF0]"}`
+              }
             >
               <img src={item.icon} className="w-3.5 h-3.5 mx-1.5" />
               <p>{item.name}</p>

@@ -10,6 +10,7 @@ export default function Render({ children }) {
     company: 0,
     payment: 0,
     schedule: 0,
+    form: 0,
   });
   return (
     <ReRender.Provider value={{ refresh, setRefresh }}>

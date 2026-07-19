@@ -7,7 +7,7 @@ function Dashboard() {
     <div className="relative">
       <div className="flex  ">
         <SideBar />
-        <div className="flex-1 mt-14  ">
+        <div className="flex-1 mt-14 ">
           <Outlet />
         </div>
       </div>

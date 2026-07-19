@@ -7,12 +7,13 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TopBar from "../Components/TopBar/TopBar";
 import { useState } from "react";
+import ModalMessages from "../Components/modals/ModalMessages";
 
 function Messages() {
   const [showModal, setShowModal] = useState(false);
 
   const { conversation } = useListConversation();
-  const navgatie = useNavigate();
+  const navigate = useNavigate();
 
   const headers = [
     { key: "customer", value: "Customer" },
@@ -24,7 +25,6 @@ function Messages() {
   return (
     <>
       <TopBar title="Messages" onCreate={() => setShowModal(true)} />
-
       <TableNavlinks
         tabs={[
           { label: "Inbox · 40" },
@@ -40,10 +40,11 @@ function Messages() {
           {
             label: <FontAwesomeIcon icon={faEye} />,
 
-            onClick: (item) => navgatie(`/dashboard/chat/${item.id}`),
+            onClick: (item) => navigate(`/dashboard/chat/${item.id}`),
           },
         ]}
       />
+      <ModalMessages showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 }
