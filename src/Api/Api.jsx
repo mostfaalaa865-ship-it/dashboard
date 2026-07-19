@@ -13,3 +13,5 @@ export const teams = "/teams";
 export const documents = "/documents";
 export const payments = "/payments";
 export const schedule = "/schedule";
+export const forms = "/forms";
+export const submissions = "/submissions";

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGetOrCreateConversation from "../../hooks/Messages/usegetOrCreateConversation";
 
-function ModalMessages({ showModal, setShowModal, id }) {
+function ModalMessages({ showModal, setShowModal }) {
   const [client_id, setclient_id] = useState();
   const clients = useClients();
   const navigate = useNavigate();
@@ -27,7 +27,11 @@ function ModalMessages({ showModal, setShowModal, id }) {
   return (
     <div>
       {showModal && (
-        <Modal id={id} setShowModal={setShowModal} disable={!client_id}>
+        <Modal
+          setShowModal={setShowModal}
+          disable={!client_id}
+          buttonText={"create"}
+        >
           <form
             onSubmit={handlechat}
             id="form"

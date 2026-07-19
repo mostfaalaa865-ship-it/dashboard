@@ -2,7 +2,9 @@ import React from "react";
 import useDocuments from "../hooks/Documents/useDocuments";
 import Table from "../Components/Table";
 import TableSkeleton from "../TableSkeleton";
+import TableNavlinks from "../Components/TableNavlinks";
 import { useNavigate } from "react-router-dom";
+import TopBar from "../Components/TopBar/TopBar";
 
 function Documents() {
   const { documentsData } = useDocuments();
@@ -16,6 +18,21 @@ function Documents() {
   ];
   return (
     <div>
+      <TopBar title="Documents" />
+      <TableNavlinks
+        tabs={[
+          { label: "All · 40" },
+          { label: "Guests · 45" },
+          { label: "Partners · 17" },
+          { label: "Blocked · 3" },
+        ]}
+        // setsearchValue={setsearchValue}
+        // searchValue={searchValue}
+        // setOpen={setOpen}
+        // open={open}
+        // filterOptions={ClientsFilters}
+      />
+
       <Table
         data={documentsData}
         headers={headers}

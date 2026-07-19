@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useGetMessages from "./hooks/Messages/useGetMessages";
 import arrow from "./assets/arrow.svg";
 import email from "./assets/email.svg";
@@ -10,9 +10,12 @@ import { Axios } from "./Api/Axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { Document, Page } from "react-pdf";
+import { conversations } from "./Api/Api";
+import useGetclient from "./hooks/Clients/useGetclient";
 
 function Chat() {
   const [page, setpage] = useState(1);
+  const [clien_id, setclien_id] = useState();
   const { id } = useParams();
   const [messageText, setMessageText] = useState("");
   const sendMessage = useSendMessage();
@@ -26,6 +29,15 @@ function Chat() {
   const [show, setshow] = useState(false);
   const [urlImage, seturlImage] = useState();
   const [pdfUrl, setPdfUrl] = useState(null);
+  const navigate = useNavigate();
+  const client = useGetclient(clien_id);
+  console.log();
+
+  useEffect(() => {
+    Axios.get(`${conversations}/${id}`).then((res) => {
+      setclien_id(res.data.conversation.client_id);
+    });
+  }, [id]);
 
   useEffect(() => {
     ReadMessages(id);
@@ -113,178 +125,236 @@ function Chat() {
 
   return (
     <>
-      {show && (
-        <>
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div
-              className="absolute inset-0 bg-black/70"
-              onClick={() => setshow(false)}
-            />
-
-            <div className="relative w-[90%] md:w-[70%] h-[90%]   overflow-hidden">
-              <button
-                onClick={() => setshow(false)}
-                className="absolute top-2 right-2 z-10 bg-red-500 text-white px-2 py-1 rounded cursor-pointer"
-              >
-                ✕
-              </button>
-
-              <img
-                src={urlImage}
-                className="w-full h-full object-contain z-52"
-                alt=""
-              />
-            </div>
-          </div>
-        </>
-      )}
-      <div className="p-3">
-        <div
-          className="p-3 mb-4 w-[700px] max-h-[500px] overflow-auto"
-          ref={chatRef}
+      <div className="flex items-center gap-2 text-sm  top-0  border-b-2 border-[#ECEDF0] p-4">
+        <span
+          onClick={() => navigate("/dashboard")}
+          className="cursor-pointer text-[#8F929C] hover:text-[#25272D]"
         >
-          {GetMessages?.length === 0 && (
-            <p className="text-center text-purple-900">لا يوجد رسائل</p>
+          Dashboard
+        </span>
+
+        <span className="text-[#D0D5DD]">/</span>
+
+        <span
+          onClick={() => navigate("/dashboard/messages")}
+          className="cursor-pointer text-[#8F929C] hover:text-[#25272D]"
+        >
+          Messages
+        </span>
+
+        <span className="text-[#D0D5DD]">/</span>
+
+        <span className="text-[#25272D] font-medium">Chat</span>
+      </div>
+
+      <div className="flex  justify-items-center w-[100%] p-4">
+        <div className="w-[80%]">
+          {show && (
+            <>
+              <div className="fixed inset-0 z-50 flex items-center justify-center ">
+                <div
+                  className="absolute inset-0 bg-black/70"
+                  onClick={() => setshow(false)}
+                />
+
+                <div className="relative w-[90%] md:w-[70%] h-[90%]   overflow-hidden">
+                  <button
+                    onClick={() => setshow(false)}
+                    className="absolute top-2 right-2 z-10 bg-red-500 text-white px-2 py-1 rounded cursor-pointer"
+                  >
+                    ✕
+                  </button>
+
+                  <img
+                    src={urlImage}
+                    className="w-full h-full object-contain z-52"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </>
           )}
-          {GetMessages?.map((mes, index) => {
-            const showDate = isNewDay(mes, GetMessages[index - 1]);
-            return (
-              <div key={`${mes.id}-${index}`}>
-                {showDate && (
-                  <div className="text-center my-3">
-                    <span className="text-xs bg-gray-200 px-3 py-1 rounded-full text-gray-600">
-                      {formatDay(mes.created_at)}
-                    </span>
+          <div className="p-3">
+            <div
+              className="p-3 mb-4 w-[100%] max-h-[500px] overflow-auto"
+              ref={chatRef}
+            >
+              {GetMessages?.length === 0 && (
+                <p className="text-center text-purple-900">لا يوجد رسائل</p>
+              )}
+              {GetMessages?.map((mes, index) => {
+                const showDate = isNewDay(mes, GetMessages[index - 1]);
+                return (
+                  <div key={`${mes.id}-${index}`}>
+                    {showDate && (
+                      <div className="text-center my-3">
+                        <span className="text-xs bg-gray-200 px-3 py-1 rounded-full text-gray-600">
+                          {formatDay(mes.created_at)}
+                        </span>
+                      </div>
+                    )}
+
+                    <div
+                      className={`p-3 m-4 rounded-3xl max-w-[70%] ${
+                        mes.sender === "user"
+                          ? "ml-auto text-right bg-[#F3F4F6]"
+                          : "mr-auto text-left bg-[#E6F2FE]"
+                      }`}
+                    >
+                      {mes.attachments.map((item, i) => {
+                        const fileUrl = `https://mostafa.nageeb-darwish.cloud/storage/${item.path}`;
+
+                        return item.mime_type === "application/pdf" ||
+                          item.type === "application/pdf" ? (
+                          <p
+                            key={i}
+                            className="text-blue-600 cursor-pointer"
+                            onClick={() =>
+                              setPdfUrl(
+                                item.path ? fileUrl : URL.createObjectURL(item),
+                              )
+                            }
+                          >
+                            📄 Open PDF
+                          </p>
+                        ) : (
+                          <span
+                            key={i}
+                            onClick={() =>
+                              handleImage(
+                                item.path ? fileUrl : URL.createObjectURL(item),
+                              )
+                            }
+                          >
+                            <img
+                              src={
+                                item.path ? fileUrl : URL.createObjectURL(item)
+                              }
+                              alt=""
+                            />
+                          </span>
+                        );
+                      })}
+                      <p>{mes.body}</p>
+                      <div className="flex justify-end items-center gap-1 mt-1">
+                        <span className="text-[10px] text-gray-400">
+                          {formatTime(mes.created_at)}
+                        </span>
+                        <span className="text-[10px]">
+                          {mes.read_at ? "✔✔" : "✔"}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                )}
+                );
+              })}
+            </div>
+
+            <div className=" w-[100%] p-3 border-2 border-[#E2E4E9] h-31.25 rounded-2xl">
+              <div>
+                <div className="flex items-center">
+                  <img className="w-4 h-4" src={email} alt="" />
+                  <p className="m-1 text-[#4A4D59]">Email</p>
+                  <img className="w-4 h-4" src={arrow} alt="" />
+                </div>
+                <input
+                  value={messageText}
+                  className="text-[#8F929C] w-full border-none outline-none"
+                  placeholder="Use ⌘K for shortcuts"
+                  onChange={(e) => setMessageText(e.target.value)}
+                />
+              </div>
+              <div className="flex justify-end items-center mt-2">
+                {image.length > 0
+                  ? image.map((img) => (
+                      <img
+                        src={URL.createObjectURL(img)}
+                        className="w-10 h-10 me-4"
+                        alt=""
+                      />
+                    ))
+                  : ""}
+                <FontAwesomeIcon
+                  className="cursor-pointer me-4"
+                  icon={faPaperclip}
+                  onClick={() => {
+                    InputRef.current.click();
+                  }}
+                />
+                <input
+                  type="file"
+                  className="hidden"
+                  ref={InputRef}
+                  multiple
+                  onChange={(e) => {
+                    setimage([...e.target.files]);
+                  }}
+                />
+
+                <button onClick={handlesendMessage} className="cursor-pointer">
+                  Send
+                </button>
+
+                <img className="w-4 h-4" src={arrow} alt="" />
+              </div>
+
+              <div
+                className={`fixed inset-0  flex items-center justify-center ${pdfUrl ? "z-50 " : " invisible z-0"} `}
+              >
+                <div
+                  className={`absolute inset-0 bg-black/70 transition-all   ${pdfUrl ? "  block " : " invisible z-0"}`}
+                ></div>
+                <div onClick={() => setPdfUrl(null)} />
 
                 <div
-                  className={`p-3 m-4 rounded-3xl max-w-[70%] ${
-                    mes.sender === "user"
-                      ? "ml-auto text-right bg-[#F3F4F6]"
-                      : "mr-auto text-left bg-[#E6F2FE]"
-                  }`}
+                  className={`relative w-[90%] md:w-[70%] h-[90%] bg-white rounded-xl  shadow-xl overflow-hidden transition-all ${pdfUrl ? " scale-100 block " : "scale-50  invisible z-0"}`}
                 >
-                  {mes.attachments.map((item, i) => {
-                    const fileUrl = `https://mostafa.nageeb-darwish.cloud/storage/${item.path}`;
+                  {/* Close button */}
+                  <button
+                    onClick={() => setPdfUrl(null)}
+                    className="absolute top-2 right-2 z-10 bg-red-500 text-white px-2 py-1 rounded  "
+                  >
+                    ✕
+                  </button>
 
-                    return item.mime_type === "application/pdf" ||
-                      item.type === "application/pdf" ? (
-                      <p
-                        key={i}
-                        className="text-blue-600 cursor-pointer"
-                        onClick={() =>
-                          setPdfUrl(
-                            item.path ? fileUrl : URL.createObjectURL(item),
-                          )
-                        }
-                      >
-                        📄 Open PDF
-                      </p>
-                    ) : (
-                      <span
-                        key={i}
-                        onClick={() =>
-                          handleImage(
-                            item.path ? fileUrl : URL.createObjectURL(item),
-                          )
-                        }
-                      >
-                        <img
-                          src={item.path ? fileUrl : URL.createObjectURL(item)}
-                          alt=""
-                        />
-                      </span>
-                    );
-                  })}
-                  <p>{mes.body}</p>
-                  <div className="flex justify-end items-center gap-1 mt-1">
-                    <span className="text-[10px] text-gray-400">
-                      {formatTime(mes.created_at)}
-                    </span>
-                    <span className="text-[10px]">
-                      {mes.read_at ? "✔✔" : "✔"}
-                    </span>
+                  <div className="h-full overflow-auto p-2">
+                    <Document file={pdfUrl}>
+                      <Page pageNumber={1} />
+                    </Document>
                   </div>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          </div>
         </div>
 
-        <div className="w-175 p-3 border-2 border-[#E2E4E9] h-31.25 rounded-2xl">
-          <div>
-            <div className="flex items-center">
-              <img className="w-4 h-4" src={email} alt="" />
-              <p className="m-1 text-[#4A4D59]">Email</p>
-              <img className="w-4 h-4" src={arrow} alt="" />
+        <div className="bg-[#FBFBFC] w-[40%] p-10">
+          <h2 className="text-xl font-semibold mb-6">Customer</h2>
+          <div className="flex  gap-20  my-3">
+            <div className="w-32 text-gray-400">Type</div>
+            <div>
+              <span className="bg-gray-100 px-2 py-1 rounded">Guest</span>
             </div>
-            <input
-              value={messageText}
-              className="text-[#8F929C] w-full border-none outline-none"
-              placeholder="Use ⌘K for shortcuts"
-              onChange={(e) => setMessageText(e.target.value)}
-            />
-          </div>
-          <div className="flex justify-end items-center mt-2">
-            {image.length > 0
-              ? image.map((img) => (
-                  <img
-                    src={URL.createObjectURL(img)}
-                    className="w-10 h-10 me-4"
-                    alt=""
-                  />
-                ))
-              : ""}
-            <FontAwesomeIcon
-              className="cursor-pointer me-4"
-              icon={faPaperclip}
-              onClick={() => {
-                InputRef.current.click();
-              }}
-            />
-            <input
-              type="file"
-              className="hidden"
-              ref={InputRef}
-              multiple
-              onChange={(e) => {
-                setimage([...e.target.files]);
-              }}
-            />
-
-            <button onClick={handlesendMessage} className="cursor-pointer">
-              Send
-            </button>
-
-            <img className="w-4 h-4" src={arrow} alt="" />
           </div>
 
-          <div
-            className={`fixed inset-0  flex items-center justify-center ${pdfUrl ? "z-50 " : " invisible z-0"} `}
-          >
-            <div
-              className={`absolute inset-0 bg-black/70 transition-all   ${pdfUrl ? "  block " : " invisible z-0"}`}
-            ></div>
-            <div onClick={() => setPdfUrl(null)} />
+          <div className="flex  gap-20 my-3">
+            <div className="w-32 text-gray-400">ID</div>
+            <div className="truncate">{client?.client?.id}</div>
+          </div>
 
-            <div
-              className={`relative w-[90%] md:w-[70%] h-[90%] bg-white rounded-xl  shadow-xl overflow-hidden transition-all ${pdfUrl ? " scale-100 block " : "scale-50  invisible z-0"}`}
-            >
-              {/* Close button */}
-              <button
-                onClick={() => setPdfUrl(null)}
-                className="absolute top-2 right-2 z-10 bg-red-500 text-white px-2 py-1 rounded  "
-              >
-                ✕
-              </button>
+          <div className="flex  gap-20  my-3">
+            <div className="w-32 text-[#8F929C]">Name</div>
+            <div>{client?.client?.full_name}</div>
+          </div>
 
-              <div className="h-full overflow-auto p-2">
-                <Document file={pdfUrl}>
-                  <Page pageNumber={1} />
-                </Document>
-              </div>
-            </div>
+          <div className="flex  gap-20  my-3">
+            <div className="w-32 text-[#8F929C]">Location</div>
+            <div>{client?.client?.location}</div>
+          </div>
+
+          <div className="flex   gap-20  my-3">
+            <div className="w-32 text-[#8F929C]">Phone</div>
+            <div>{client?.client?.phone}</div>
           </div>
         </div>
       </div>
